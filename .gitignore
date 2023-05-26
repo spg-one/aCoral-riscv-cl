@@ -814,3 +814,4 @@ kendryte-standalone-demo-bak
 !src/hello_world
 /CMakeSettings.json
 /build_i
+Doxygen

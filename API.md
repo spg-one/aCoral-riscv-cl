@@ -1,6 +1,6 @@
 # aCoral-I User Programming API
 
-## 关于每个API的详细使用方法，参见doxygen文档
+## 关于每个API的详细使用方法，参见doxygen文档(将Doxyfile导入Doxywizard生成)
 ---
 ## 内存相关
 * acoral_malloc 伙伴系统分配内存
