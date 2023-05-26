@@ -70,7 +70,14 @@ make
 
 You will get 2 key files in build dir, `acoral` and `acoral.bin`.
 
-1. If you are using want to debug your program, use `acoral`
+* If you are using want to debug your program, use `acoral`. You need to replace the string at line 132 in launch.json
+```
+C:/Users/SPGGO/Documents/aCoral/aCoral-riscv-cl/build/acoral
+``` 
+to
+```
+/your/acoral/elf/loaction
+```
 2. If you want to flash it onto k210, use `acoral.bin`. Flash tool could be download download [here](https://github.com/sipeed/kflash_gui/releases). Remember to press 'BOOT' button on board while pressing 'RESET', that is for entering ISP Download Mode.Baud rate need to be set as 115200.
 
 ---
