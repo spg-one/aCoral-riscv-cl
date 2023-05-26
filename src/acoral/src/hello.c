@@ -27,7 +27,7 @@
  int main()	
 {	
     uint64_t core = current_coreid();	
-    printf("Core %ld Hello world spg\n", core);	
+    printf("Core %ld Hello world spg1\n", core);	
     // register_core1(core1_function, NULL);	
     acoral_start();	
 }

@@ -81,4 +81,8 @@ to
 2. If you want to flash it onto k210, use `acoral.bin`. Flash tool could be download download [here](https://github.com/sipeed/kflash_gui/releases). Remember to press 'BOOT' button on board while pressing 'RESET', that is for entering ISP Download Mode.Baud rate need to be set as 115200.
 
 ---
+## aCoral-I User Programming API
+You can find aCoral programming API [here](API.md)
+
+---
 e-mail: SPGGOGOGO@outlook.com
