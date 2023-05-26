@@ -65,6 +65,7 @@
         "hal.h": "c",
         "hal_int.h": "c",
         "policy.h": "c",
-        "bsp.h": "c"
+        "bsp.h": "c",
+        "atomic.h": "c"
     }
 }

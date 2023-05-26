@@ -1,0 +1,66 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "acoral debug",
+      "type": "cppdbg",
+      "cwd": "${workspaceFolder}",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/acoral",
+      "stopAtEntry": true,
+      "filterStderr": true,
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }, 
+        {
+          "description": "Set Disassembly Flavor to Intel",
+          "text": "-gdb-set disassembly-flavor intel",
+          "ignoreFailures": true
+        },
+        {
+          "text": "-target-select remote localhost:3333",
+          "description": "connect to target",
+          "ignoreFailures": false
+        },
+        {
+          "text": "-file-exec-and-symbols C:/Users/SPGGO/Documents/aCoral/aCoral-riscv-cl/build/acoral",
+          "description": "load file",
+          "ignoreFailures": false
+        },
+        // {
+        //   "text": "-interpreter-exec console \"monitor reset\"",
+        //   "ignoreFailures": false
+        // },
+        // {
+        //   "text": "-interpreter-exec console \"monitor halt\"",
+        //   "ignoreFailures": false
+        // },
+        // {
+        //   "text": "-interpreter-exec console \"monitor arm semihosting enable\"",
+        //   "ignoreFailures": false
+        // },
+        {
+          "text": "-target-download",
+          "description": "flash target",
+          "ignoreFailures": false
+        }
+      ],
+      "logging": {
+        "engineLogging": true,
+        "programOutput": true,
+      },
+      // "launchCompleteCommand": "exec-run",
+      "MIMode": "gdb",
+      "miDebuggerPath": "${env:RISCV_TOOLCHAIN}/bin/riscv64-unknown-elf-gdb.exe",
+      // "miDebuggerServerAddress": "localhost:3333",
+      "debugServerPath": "${env:RISCV_DEBUG_SERVER}/bin/openocd.exe",
+      "debugServerArgs": "-f ${workspaceFolder}/sipeed-rv-debugger.cfg"
+    }
+  ]
+}
