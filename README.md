@@ -6,7 +6,7 @@
 This is aCoral-I single-core version on k210 board,developed with Kendryte K210 standalone SDK.
 
 ---
-## TOC
+## I. TOC
 ```
 --build  //cmake build target dir
   |--acoral  //elf file
@@ -25,7 +25,7 @@ This is aCoral-I single-core version on k210 board,developed with Kendryte K210 
 ```
 
 ---
-## Prerequisite
+## II. Prerequisite
 ### 1. install toolchain
 download [here](https://github.com/kendryte/kendryte-gnu-toolchain/releases/tag/v8.2.0-20190213), add a System Enviroment Variable named
 ```
@@ -58,7 +58,7 @@ download [here](https://cmake.org/download/), and don't forget to add it to Syst
 download [here](https://www.mingw-w64.org/downloads/), and don't forget to add it to System Path
 
 ---
-## Usage
+## III. Usage
 
 If you want to make change of cmake and create a new Makefile, delete 'build' directory, or you even don't have a 'build' dir,  run commands below in root directory of project.
 
@@ -81,7 +81,7 @@ to
 2. If you want to flash it onto k210, use `acoral.bin`. Flash tool could be download download [here](https://github.com/sipeed/kflash_gui/releases). Remember to press 'BOOT' button on board while pressing 'RESET', that is for entering ISP Download Mode.Baud rate need to be set as 115200.
 
 ---
-## aCoral-I User Programming API
+## IV. aCoral-I User Programming API
 You can find aCoral programming API [here](API.md)
 
 ---
