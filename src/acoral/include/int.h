@@ -51,8 +51,6 @@ typedef struct {
  * 
  */
 #define acoral_exit_critical() HAL_EXIT_CRITICAL()
-
-#define acoral_intr_nesting HAL_GET_INTR_NESTING()
 #define acoral_intr_nesting_inc() HAL_INTR_NESTING_INC()
 #define acoral_intr_nesting_dec() HAL_INTR_NESTING_DEC()
 

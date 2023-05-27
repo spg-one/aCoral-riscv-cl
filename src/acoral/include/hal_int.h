@@ -19,6 +19,8 @@
 #define HAL_INTR_ENABLE()     __asm volatile  ( "csrc mstatus,8" )
 #define HAL_INTR_DISABLE()    __asm volatile  ( "csrs mstatus,8" )
 
+extern int acoral_intr_nesting;
+
 /**
  * @brief 使能中断。通过向中断屏蔽（INTMSK）寄存器某位写入0来打开相应中断，对中断复用进行了合并处理
  *
@@ -34,11 +36,6 @@ void hal_intr_unmask(int vector);
 void hal_intr_mask(int vector);
 
 void hal_intr_ack(unsigned int vector);
-
-/**
- * @brief 中断嵌套初始化
- */
-void hal_intr_nesting_init_comm();
 
 /**
  * @brief 获取系统当前中断嵌套数
@@ -76,8 +73,6 @@ void hal_intr_exit_bridge_comm();
 *  hal层中断部分通用接口
 *****************************/
 
-#define HAL_INTR_NESTING_INIT()   hal_intr_nesting_init_comm()
-#define HAL_GET_INTR_NESTING()    hal_get_intr_nesting_comm()
 #define HAL_INTR_NESTING_DEC()    hal_intr_nesting_dec_comm()
 #define HAL_INTR_NESTING_INC()    hal_intr_nesting_inc_comm()
 #define HAL_ENTER_CRITICAL()  HAL_INTR_DISABLE()

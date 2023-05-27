@@ -16,8 +16,8 @@
 #include "hal_int.h"
 #include "lsched.h"
 
-///中断嵌套数
-unsigned int intr_nesting;
+///中断嵌套数。大于0表示正在中断中。大于1表示中断层数不止一层，即中断嵌套。
+int acoral_intr_nesting = 0;
 
 void hal_intr_unmask(int vector)
 {
@@ -29,25 +29,19 @@ void hal_intr_mask(int vector)
 	// TODO riscv-加上
 }
 
-void hal_intr_nesting_init_comm()
-{
-	intr_nesting = 0;
-}
 
-unsigned int hal_get_intr_nesting_comm()
-{
-	return intr_nesting;
-}
+
+
 
 void hal_intr_nesting_dec_comm()
 {
-	if (intr_nesting > 0)
-		intr_nesting--;
+	if (acoral_intr_nesting > 0)
+		acoral_intr_nesting--;
 }
 
 void hal_intr_nesting_inc_comm()
 {
-	intr_nesting++;
+	acoral_intr_nesting++;
 }
 
 void hal_sched_bridge_comm()

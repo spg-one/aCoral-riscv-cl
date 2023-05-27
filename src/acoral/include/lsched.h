@@ -20,7 +20,7 @@
 #include "thread.h"
 
 extern unsigned char acoral_need_sched; 
-extern unsigned char sched_lock;
+extern unsigned char acoral_sched_locked;
 extern acoral_thread_t *acoral_cur_thread,*acoral_ready_thread;
 
 ///就绪队列中的优先级位图的大小，目前等于2，算法就是优先级数目除以32向上取整

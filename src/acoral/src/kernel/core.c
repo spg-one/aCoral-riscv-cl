@@ -20,7 +20,7 @@
 #include <stdbool.h>
 
 acoral_list_t acoral_res_release_queue; ///< 将被daem线程回收的线程队列
-volatile unsigned int acoral_start_sched = false;
+volatile unsigned int acoral_start_sched = false; ///<aCoral启动后，经过init线程，这个变量就永远变为true
 int daemon_id, idle_id, init_id;
 extern void user_main();
 
@@ -127,7 +127,7 @@ void acoral_core_cpu_start()
 
 void acoral_start_os()
 {
-	sched_lock = false;
+	acoral_sched_locked = false;
 	acoral_need_sched = false; 
 	acoral_select_thread();
 	acoral_set_running_thread(acoral_ready_thread); // SPG可能存在空指针

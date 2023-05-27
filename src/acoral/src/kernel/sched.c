@@ -25,7 +25,7 @@
 /// 当发生调度之后，该标志位被置为false，直到又有新的线程被就绪或者挂起
 unsigned char acoral_need_sched; 
 
-unsigned char sched_lock = true;	 ///< aCoral初始化完成之前，调度都是被上锁的，即不允许调度。
+unsigned char acoral_sched_locked = true;	 ///< aCoral初始化完成之前，调度都是被上锁的，即不允许调度。
 acoral_thread_t *acoral_cur_thread;		///<acoral当前运行的线程
 acoral_thread_t *acoral_ready_thread;	///<下一个将被调度运行的线程
 
@@ -127,7 +127,7 @@ void acoral_sched()
 	if (acoral_intr_nesting)
 		return;
 
-	if (sched_lock)
+	if (acoral_sched_locked)
 		return;
 	/*如果还没有开始调度，则返回*/
 	if (!acoral_start_sched)

@@ -66,6 +66,17 @@
         "hal_int.h": "c",
         "policy.h": "c",
         "bsp.h": "c",
-        "atomic.h": "c"
-    }
+        "atomic.h": "c",
+        "sleep.h": "c",
+        "syscalls.h": "c",
+        "stddef.h": "c",
+        "encoding.h": "c",
+        "clint.h": "c",
+        "stdint.h": "c"
+    },
+    "cmake.sourceDirectory": "${workspaceFolder}",
+    "cmake.configureArgs": [
+        "-DPROJ=acoral"
+    ],
+    "cmake.outputLogEncoding": "UTF-8",
 }

@@ -24,9 +24,6 @@ void acoral_intr_sys_init()
 	/*关中断*/
 	acoral_intr_disable();
 
-	/*中断嵌套标志初始化*/
-	HAL_INTR_NESTING_INIT();
-
 	/*中断底层初始化函数*/
 	plic_init();
 }
@@ -52,4 +49,21 @@ int acoral_intr_mask(int vector){
 
 void acoral_default_isr(int vector){
 	printf("in acoral_default_isr");
+}
+
+void acoral_intr_exit(){
+      	if(!acoral_need_sched)
+	    return;
+
+	if(acoral_intr_nesting)
+	    return;
+
+	if(acoral_sched_locked)
+	    return;
+
+	if (!acoral_start_sched)
+	    return;
+      
+      /*如果需要调度，则调用此函数*/
+	HAL_INTR_EXIT_BRIDGE();
 }
