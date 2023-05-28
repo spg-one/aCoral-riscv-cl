@@ -15,6 +15,7 @@
 
 #include "hal_int.h"
 #include "lsched.h"
+#include <stdint.h>
 
 ///中断嵌套数。大于0表示正在中断中。大于1表示中断层数不止一层，即中断嵌套。
 int acoral_intr_nesting = 0;
@@ -51,10 +52,11 @@ void hal_sched_bridge_comm()
 	HAL_EXIT_CRITICAL();
 }
 
-void hal_intr_exit_bridge_comm()
+unsigned long hal_intr_exit_bridge_comm(unsigned long old_sp)
 {
 
 	HAL_ENTER_CRITICAL();
-	acoral_real_intr_sched();
+	unsigned long next_sp = acoral_real_intr_sched(old_sp);
 	HAL_EXIT_CRITICAL();
+	return next_sp;
 }

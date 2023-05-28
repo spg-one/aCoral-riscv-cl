@@ -2,7 +2,11 @@
 #include "acoral.h"
 
 void p1(){
-    printf("in p11\n");
+    printf("in p1\n");
+    int i = 0;
+    i++;
+    printf("out p1\n");
+    return;
 }
 
 void user_main(){

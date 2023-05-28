@@ -13,10 +13,21 @@
  *  </table>
  */
 
-.globl HAL_INTR_CTX_SWITCH
-.globl HAL_CONTEXT_SWITCH
-.globl HAL_CTX_SWITCH_EXIT
-.globl HAL_SWITCH_TO
+  .globl HAL_INTR_CTX_SWITCH
+  .type HAL_INTR_CTX_SWITCH, @function
+  .align 2
+
+  .globl HAL_CONTEXT_SWITCH
+  .type HAL_CONTEXT_SWITCH, @function
+  .align 2
+
+  .globl HAL_INTR_SWITCH_TO
+  .type HAL_INTR_SWITCH_TO, @function
+  .align 2
+
+  .globl HAL_SWITCH_TO
+  .type HAL_SWITCH_TO, @function
+  .align 2
 
 #define REGBYTES    8
 #define FREGBYTES   4
@@ -124,20 +135,6 @@ save_mpie:
 #endif /*ACORAL_USING_SMP*/
     j HAL_CTX_SWITCH_EXIT
 
-
-#ifdef ACORAL_USING_SMP
-HAL_INTR_CTX_SWITCH:
-
-    sd a0, 0(a1)
-
-    ld  sp, 0(a2)
-    move  a0, a3
-    call rt_cpus_lock_status_resd
-
-    j HAL_CTX_SWITCH_EXIT
-#endif
-
-
 HAL_CTX_SWITCH_EXIT:
 #ifdef ACORAL_USING_SMP
 #ifdef ACORAL_USING_SIGNALS
@@ -237,4 +234,10 @@ HAL_CTX_SWITCH_EXIT:
     mret
 
     
-
+HAL_INTR_CTX_SWITCH:
+    sd a3,  (a1)
+HAL_INTR_SWITCH_TO:  
+    ld a0, (a0)
+    ld t0, 0*REGBYTES(a0)
+    csrw mepc, t0
+    ret

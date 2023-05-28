@@ -72,7 +72,10 @@
         "stddef.h": "c",
         "encoding.h": "c",
         "clint.h": "c",
-        "stdint.h": "c"
+        "stdint.h": "c",
+        "int.h": "c",
+        "stdio.h": "c",
+        "acoral.h": "c"
     },
     "cmake.sourceDirectory": "${workspaceFolder}",
     "cmake.configureArgs": [

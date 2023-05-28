@@ -104,7 +104,7 @@ void period_thread_delay(acoral_thread_t* thread,unsigned int time){
 }
 
 void period_delay_deal(){
-	int need_re_sched= 0;
+	// int need_re_sched= 0;
 	acoral_list_t *tmp,*tmp1,*head;
 	acoral_thread_t * thread;
 	period_private_data_t * private_data;
@@ -126,13 +126,13 @@ void period_delay_deal(){
 			thread->stack=(unsigned int *)((char *)thread->stack_buttom+thread->stack_size-4);
 			thread->stack = HAL_STACK_INIT(thread->stack,private_data->route,period_thread_exit,private_data->args);
 			acoral_rdy_thread(thread);
-			need_re_sched = 1;
+			// need_re_sched = 1;
 		}
 		period_thread_delay(thread,private_data->time);
-		if(need_re_sched)
-		{
-			acoral_sched();//SPG我是小丑，时钟中断里不能调度的，应该在把中断退出函数加回来
-		}
+		// if(need_re_sched)
+		// {
+		// 	acoral_sched();//SPG我是小丑，时钟中断里不能调度的，应该在把中断退出函数加回来
+		// }
 	}
 }
 

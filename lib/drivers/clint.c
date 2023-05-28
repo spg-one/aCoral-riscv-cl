@@ -17,6 +17,7 @@
 #include "clint.h"
 #include "encoding.h"
 #include "sysctl.h"
+#include <stdio.h>
 
 volatile clint_t *const clint = (volatile clint_t *)CLINT_BASE_ADDR;
 static clint_timer_instance_t clint_timer_instance[CLINT_NUM_CORES];
@@ -216,19 +217,22 @@ int clint_ipi_unregister(void)
     /* Just assign NULL to user callback function and context */
     return clint_ipi_register(NULL, NULL);
 }
-
+int i =0;
+int idle_enable_printf=0;
 uintptr_t handle_irq_m_timer(uintptr_t cause, uintptr_t epc)
 {
     /* Read core id */
     uint64_t core_id = current_coreid();
     uint64_t ie_flag = read_csr(mie);
-
+    // printf("in timer int : %d times\n",i);
     clear_csr(mie, MIP_MTIP | MIP_MSIP);
     set_csr(mstatus, MSTATUS_MIE);
     if(clint_timer_instance[core_id].callback != NULL)
         clint_timer_instance[core_id].callback(
             clint_timer_instance[core_id].ctx);
     clear_csr(mstatus, MSTATUS_MIE);
+    // printf("out timer int : %d times\n",i++);
+    idle_enable_printf = 1;
     set_csr(mstatus, MSTATUS_MPIE | MSTATUS_MPP);
     write_csr(mie, ie_flag);
     /* If not single shot and cycle interval is not 0, repeat this timer */

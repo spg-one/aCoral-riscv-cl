@@ -92,7 +92,7 @@ typedef struct {
 void HAL_SWITCH_TO(unsigned int** next);
 void HAL_CONTEXT_SWITCH(unsigned int **prev , unsigned int **next);
 void HAL_INTR_SWITCH_TO(unsigned int **next);
-void HAL_INTR_CTX_SWITCH(unsigned int **prev , unsigned int **next);
+void HAL_INTR_CTX_SWITCH(unsigned int **next , unsigned int **prev, unsigned long old_sp);
 unsigned int* hal_stack_init(unsigned int *stack, void *route, void *exit, void *args);
 
 //线程相关的硬件抽象接口 //TODO 全大写为了和汇编接口统一

@@ -51,19 +51,19 @@ void acoral_default_isr(int vector){
 	printf("in acoral_default_isr");
 }
 
-void acoral_intr_exit(){
-      	if(!acoral_need_sched)
-	    return;
+unsigned long acoral_intr_exit(unsigned long old_sp){
+    if(!acoral_need_sched)
+	    return ;
 
 	if(acoral_intr_nesting)
-	    return;
+	    return ;
 
 	if(acoral_sched_locked)
-	    return;
+	    return ;
 
 	if (!acoral_start_sched)
-	    return;
+	    return ;
       
       /*如果需要调度，则调用此函数*/
-	HAL_INTR_EXIT_BRIDGE();
+	return HAL_INTR_EXIT_BRIDGE(old_sp);
 }

@@ -93,4 +93,10 @@ int acoral_intr_unmask(int vector);
  */
 int acoral_intr_mask(int vector);
 
+/**
+ * @brief 中断退出函数
+ * 
+ */
+unsigned long acoral_intr_exit(unsigned long old_sp);
+
 #endif

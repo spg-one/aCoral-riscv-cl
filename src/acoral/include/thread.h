@@ -76,8 +76,8 @@ typedef struct acoral_thread_tcb{//SPG加注释
 	acoral_list_t waiting;
 	acoral_list_t global_list;
 	acoral_evt_t* evt;
-	unsigned int *stack;
-	unsigned int *stack_buttom;
+	unsigned int *stack; ///<高地址
+	unsigned int *stack_buttom;	///<低地址
 	unsigned int stack_size;
 	int delay;
 	char *name;

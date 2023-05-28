@@ -62,5 +62,5 @@ void acoral_rdyqueue_del(acoral_thread_t *old);
 void acoral_select_thread(void);
 void acoral_sched(void);
 void acoral_real_sched();
-void acoral_real_intr_sched();
+unsigned long acoral_real_intr_sched(unsigned long old_sp);
 #endif

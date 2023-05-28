@@ -21,6 +21,7 @@
 #include "interrupt.h"
 #include "syscalls.h"
 #include "syslog.h"
+#include "int.h"
 
 uintptr_t __attribute__((weak))
 handle_irq_dummy(uintptr_t cause, uintptr_t epc, uintptr_t regs[32], uintptr_t fregs[32])
@@ -61,5 +62,8 @@ handle_irq(uintptr_t cause, uintptr_t epc, uintptr_t regs[32], uintptr_t fregs[3
 #if defined(__GNUC__)
 #pragma GCC diagnostic warning "-Woverride-init"
 #endif
-    return irq_table[cause & CAUSE_MACHINE_IRQ_REASON_MASK](cause, epc, regs, fregs);
+    hal_intr_nesting_inc_comm();
+    uintptr_t epcRet =  irq_table[cause & CAUSE_MACHINE_IRQ_REASON_MASK](cause, epc, regs, fregs);
+    hal_intr_nesting_dec_comm();
+    return epcRet;
 }

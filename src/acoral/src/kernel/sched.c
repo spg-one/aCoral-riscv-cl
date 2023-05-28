@@ -20,6 +20,8 @@
 #include "list.h"
 #include "bitops.h"
 #include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
 
 /// aCoral是否需要调度标志，仅当aCoral就绪队列acoral_ready_queues有线程加入或被取下时，该标志被置为true；
 /// 当发生调度之后，该标志位被置为false，直到又有新的线程被就绪或者挂起
@@ -148,6 +150,7 @@ void acoral_real_sched()
 	if (prev != next)
 	{
 		acoral_set_running_thread(next);
+		printf("running thread is %s\n",acoral_cur_thread->name);
 		if (prev->state == ACORAL_THREAD_STATE_EXIT)
 		{
 			prev->state = ACORAL_THREAD_STATE_RELEASE;
@@ -159,7 +162,7 @@ void acoral_real_sched()
 	}
 }
 
-void acoral_real_intr_sched()
+unsigned long acoral_real_intr_sched(unsigned long old_sp)
 {
 	acoral_thread_t *prev;
 	acoral_thread_t *next;
@@ -171,15 +174,19 @@ void acoral_real_intr_sched()
 	if (prev != next)
 	{
 		acoral_set_running_thread(next);
+		printf("running thread is %s\n",acoral_cur_thread->name);
 		if (prev->state == ACORAL_THREAD_STATE_EXIT)
 		{
 			prev->state = ACORAL_THREAD_STATE_RELEASE;
-			HAL_INTR_SWITCH_TO(&next->stack);
-			return;
+			// HAL_INTR_SWITCH_TO(&next->stack);
+			return (unsigned long)next->stack;
 		}
 		/*线程切换*/
-		HAL_INTR_CTX_SWITCH(&prev->stack, &next->stack);
+		// HAL_INTR_CTX_SWITCH(&next->stack, &prev->stack, old_sp);
+		prev->stack = (unsigned int*)old_sp;
+		return (unsigned long)next->stack;
 	}
+	return old_sp;
 }
 
 void acoral_select_thread()

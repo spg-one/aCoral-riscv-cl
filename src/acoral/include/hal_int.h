@@ -16,8 +16,8 @@
 #ifndef HAL_INT_H
 #define HAL_INT_H
 
-#define HAL_INTR_ENABLE()     __asm volatile  ( "csrc mstatus,8" )
-#define HAL_INTR_DISABLE()    __asm volatile  ( "csrs mstatus,8" )
+#define HAL_INTR_ENABLE()     __asm volatile  ( "csrs mstatus,8" )
+#define HAL_INTR_DISABLE()    __asm volatile  ( "csrc mstatus,8" )
 
 extern int acoral_intr_nesting;
 
@@ -66,7 +66,7 @@ void hal_sched_bridge_comm();
  * @brief 保证调度（中断引起）的原子性
  *
  */
-void hal_intr_exit_bridge_comm();
+unsigned long hal_intr_exit_bridge_comm(unsigned long old_sp);
 
 /****************************                                                                                                                 
 * the comm interrupt interface of hal     
@@ -79,6 +79,6 @@ void hal_intr_exit_bridge_comm();
 #define HAL_EXIT_CRITICAL()  HAL_INTR_ENABLE()
 #define HAL_INTR_ATTACH(vecotr,isr) //TODO 该写什么？
 #define HAL_SCHED_BRIDGE() hal_sched_bridge_comm() //SPGcommon指的是老版本的acoral中，有stm32的版本，但是stm32的调度被放在pendsv中，比较特殊，所有这里封装了一层接口，除了stm32其他的实现称为common
-#define HAL_INTR_EXIT_BRIDGE() hal_intr_exit_bridge_comm()
+#define HAL_INTR_EXIT_BRIDGE(sp) hal_intr_exit_bridge_comm(sp)
 
 #endif

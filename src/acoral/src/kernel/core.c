@@ -23,12 +23,10 @@ acoral_list_t acoral_res_release_queue; ///< 将被daem线程回收的线程队�
 volatile unsigned int acoral_start_sched = false; ///<aCoral启动后，经过init线程，这个变量就永远变为true
 int daemon_id, idle_id, init_id;
 extern void user_main();
-
+extern int idle_enable_printf;
 void idle(void *args)
 {
-	for (;;)
-	{
-	}
+	for(;;){}
 }
 
 void daem(void *args)
@@ -49,6 +47,7 @@ void daem(void *args)
 			tmp = tmp1;
 			if (thread->state == ACORAL_THREAD_STATE_RELEASE)
 			{
+				printf("daem is cleaning thread : %s\n",thread->name);
 				acoral_release_thread((acoral_res_t *)thread);
 			}
 			else
@@ -65,7 +64,7 @@ void daem(void *args)
 
 void init(void *args)
 {
-	printf("in init spg\n");
+	printf("init thread start!\n");
 	acoral_comm_policy_data_t data;
 	acoral_ticks_init();
 	/*ticks中断初始化函数*/
@@ -84,16 +83,16 @@ void init(void *args)
 	// acoral_shell_init();
 #endif
 	user_main();
-	printf("init done\n");
+	printf("init thread done!\n");
 }
 
 void acoral_start()
 {
 	printf("in acoral_start\n");
-	printf("before module init\n");
+	printf("module init start!\n");
 	/*内核模块初始化*/
 	acoral_module_init();
-	printf("after module init\n");
+	printf("module init done!\n");
 	/*主cpu开始函数*/
 	acoral_core_cpu_start();
 }
@@ -138,21 +137,16 @@ void acoral_module_init()
 {
 	/*中断系统初始化*/
 	acoral_intr_sys_init();
-	printf("intr_sys_init done\n");
 
 	/*内存管理系统初始化*/
 	acoral_mem_sys_init();
-	printf("mem_sys_init done\n");
 
 	/*线程管理系统初始化*/
 	acoral_thread_sys_init();
-	printf("thread_sys_init done\n");
 
 	/*时钟管理系统初始化*/
 	acoral_time_sys_init();
-	printf("time_sys_init done\n");
 
 	/*事件管理系统初始化*/
 	acoral_evt_sys_init();
-	printf("evt_sys_init done\n");
 }

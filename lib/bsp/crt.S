@@ -129,41 +129,8 @@ _start:
   .type trap_entry, @function
   .align 2
 trap_entry:
-  csrrw sp, mscratch, sp
-  addi sp, sp, -64*REGBYTES
-
-  SREG x1, 1*REGBYTES(sp)
-  SREG x2, 2*REGBYTES(sp)
-  SREG x3, 3*REGBYTES(sp)
-  SREG x4, 4*REGBYTES(sp)
-  SREG x5, 5*REGBYTES(sp)
-  SREG x6, 6*REGBYTES(sp)
-  SREG x7, 7*REGBYTES(sp)
-  SREG x8, 8*REGBYTES(sp)
-  SREG x9, 9*REGBYTES(sp)
-  SREG x10, 10*REGBYTES(sp)
-  SREG x11, 11*REGBYTES(sp)
-  SREG x12, 12*REGBYTES(sp)
-  SREG x13, 13*REGBYTES(sp)
-  SREG x14, 14*REGBYTES(sp)
-  SREG x15, 15*REGBYTES(sp)
-  SREG x16, 16*REGBYTES(sp)
-  SREG x17, 17*REGBYTES(sp)
-  SREG x18, 18*REGBYTES(sp)
-  SREG x19, 19*REGBYTES(sp)
-  SREG x20, 20*REGBYTES(sp)
-  SREG x21, 21*REGBYTES(sp)
-  SREG x22, 22*REGBYTES(sp)
-  SREG x23, 23*REGBYTES(sp)
-  SREG x24, 24*REGBYTES(sp)
-  SREG x25, 25*REGBYTES(sp)
-  SREG x26, 26*REGBYTES(sp)
-  SREG x27, 27*REGBYTES(sp)
-  SREG x28, 28*REGBYTES(sp)
-  SREG x29, 29*REGBYTES(sp)
-  SREG x30, 30*REGBYTES(sp)
-  SREG x31, 31*REGBYTES(sp)
-
+#ifdef ARCH_RISCV_FPU
+  addi sp, sp, -32*REGBYTES
   SFREG f0, ( 0  + 32)*REGBYTES(sp)
   SFREG f1, ( 1  + 32)*REGBYTES(sp)
   SFREG f2, ( 2  + 32)*REGBYTES(sp)
@@ -196,21 +163,76 @@ trap_entry:
   SFREG f29,( 29 + 32)*REGBYTES(sp)
   SFREG f30,( 30 + 32)*REGBYTES(sp)
   SFREG f31,( 31 + 32)*REGBYTES(sp)
+#endif
+
+  addi sp, sp, -32*REGBYTES
+
+  SREG x1, 1*REGBYTES(sp)
+  csrr x1, mepc
+  SREG x1, 0*REGBYTES(sp)
+  # SREG x2, 2*REGBYTES(sp)
+  csrr x1, mstatus
+  SREG x1, 2*REGBYTES(sp)
+  SREG x3, 3*REGBYTES(sp)
+  SREG x4, 4*REGBYTES(sp)
+  SREG x5, 5*REGBYTES(sp)
+  SREG x6, 6*REGBYTES(sp)
+  SREG x7, 7*REGBYTES(sp)
+  SREG x8, 8*REGBYTES(sp)
+  SREG x9, 9*REGBYTES(sp)
+  SREG x10, 10*REGBYTES(sp)
+  SREG x11, 11*REGBYTES(sp)
+  SREG x12, 12*REGBYTES(sp)
+  SREG x13, 13*REGBYTES(sp)
+  SREG x14, 14*REGBYTES(sp)
+  SREG x15, 15*REGBYTES(sp)
+  SREG x16, 16*REGBYTES(sp)
+  SREG x17, 17*REGBYTES(sp)
+  SREG x18, 18*REGBYTES(sp)
+  SREG x19, 19*REGBYTES(sp)
+  SREG x20, 20*REGBYTES(sp)
+  SREG x21, 21*REGBYTES(sp)
+  SREG x22, 22*REGBYTES(sp)
+  SREG x23, 23*REGBYTES(sp)
+  SREG x24, 24*REGBYTES(sp)
+  SREG x25, 25*REGBYTES(sp)
+  SREG x26, 26*REGBYTES(sp)
+  SREG x27, 27*REGBYTES(sp)
+  SREG x28, 28*REGBYTES(sp)
+  SREG x29, 29*REGBYTES(sp)
+  SREG x30, 30*REGBYTES(sp)
+  SREG x31, 31*REGBYTES(sp)
 
   csrr a0, mcause
   csrr a1, mepc
   mv a2, sp
-  add a3, sp, 32*REGBYTES
+  add a3, sp, 32*REGBYTES #//TODOG可能没有定义ARCH_RISCV_FPU，有bug
+  csrrw sp, mscratch, sp
   bgez a0, .handle_syscall
 .handle_irq:
   jal handle_irq
   j .restore
 .handle_syscall:
   jal handle_syscall
+  
+  
 .restore:
+  csrrw sp, mscratch, sp
   csrw mepc, a0
+  SREG a0, 0*REGBYTES(sp)
+
+  # 如果需要切换线程，那么就把sp更新为新线程的sp，mepc也改为新线程的mepc。参数和返回值为旧线程和新线程的sp
+  mv a0, sp
+  jal acoral_intr_exit
+  # 下一个线程的栈指针，无论切换了没有
+  mv sp, a0
+
+  LREG x1, 0*REGBYTES(sp)
+  csrw mepc, x1
   LREG x1, 1*REGBYTES(sp)
-  LREG x2, 2*REGBYTES(sp)
+  LREG x3, 2*REGBYTES(sp)
+  csrw mstatus, x3
+  # LREG x2, 2*REGBYTES(sp)
   LREG x3, 3*REGBYTES(sp)
   LREG x4, 4*REGBYTES(sp)
   LREG x5, 5*REGBYTES(sp)
@@ -240,7 +262,9 @@ trap_entry:
   LREG x29, 29*REGBYTES(sp)
   LREG x30, 30*REGBYTES(sp)
   LREG x31, 31*REGBYTES(sp)
+  addi sp, sp, 32*REGBYTES
 
+#ifdef ARCH_RISCV_FPU
   LFREG f0, ( 0  + 32)*REGBYTES(sp)
   LFREG f1, ( 1  + 32)*REGBYTES(sp)
   LFREG f2, ( 2  + 32)*REGBYTES(sp)
@@ -274,8 +298,8 @@ trap_entry:
   LFREG f30,( 30 + 32)*REGBYTES(sp)
   LFREG f31,( 31 + 32)*REGBYTES(sp)
 
-  addi sp, sp, 64*REGBYTES
-  csrrw sp, mscratch, sp
+  addi sp, sp, 32*REGBYTES
+#endif
   mret
 
 .section ".tdata.begin"
