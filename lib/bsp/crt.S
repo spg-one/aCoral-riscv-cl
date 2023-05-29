@@ -39,6 +39,8 @@ _start:
   csrw mip, 0
   la t0, trap_entry
   csrw mtvec, t0
+
+# 中断栈
   la t0, ISR_STACK_TOP
   csrw mscratch, t0
 
@@ -130,6 +132,8 @@ _start:
   .align 2
 trap_entry:
 #ifdef ARCH_RISCV_FPU
+
+# 使用被中断线程的sp来保存context
   addi sp, sp, -32*REGBYTES
   SFREG f0, ( 0  + 32)*REGBYTES(sp)
   SFREG f1, ( 1  + 32)*REGBYTES(sp)
@@ -207,7 +211,10 @@ trap_entry:
   csrr a1, mepc
   mv a2, sp
   add a3, sp, 32*REGBYTES #//TODOG可能没有定义ARCH_RISCV_FPU，有bug
+
+# 切换到中断栈
   csrrw sp, mscratch, sp
+
   bgez a0, .handle_syscall
 .handle_irq:
   jal handle_irq
@@ -221,10 +228,12 @@ trap_entry:
   csrw mepc, a0
   SREG a0, 0*REGBYTES(sp)
 
-  # 如果需要切换线程，那么就把sp更新为新线程的sp，mepc也改为新线程的mepc。参数和返回值为旧线程和新线程的sp
+  # acoral_intr_exit 判断中断中是否有unlock新的高优先级线程
+  # 如果有，则在中断退出需要切换线程
+  # 那么就把sp更新为新线程的sp，mepc也改为新线程的mepc，如果不需要，那么sp依旧是被中断线程的sp
   mv a0, sp
   jal acoral_intr_exit
-  # 下一个线程的栈指针，无论切换了没有
+  # 下一个线程的栈指针，无论是否需要切换线程
   mv sp, a0
 
   LREG x1, 0*REGBYTES(sp)

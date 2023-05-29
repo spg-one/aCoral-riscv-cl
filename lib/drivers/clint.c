@@ -224,14 +224,16 @@ uintptr_t handle_irq_m_timer(uintptr_t cause, uintptr_t epc)
     /* Read core id */
     uint64_t core_id = current_coreid();
     uint64_t ie_flag = read_csr(mie);
-    // printf("in timer int : %d times\n",i);
+
+    //在定时器中断中，只打开外部中断，关闭定时器中断和软件中断，表示只接受外部中断的中断嵌套
     clear_csr(mie, MIP_MTIP | MIP_MSIP);
     set_csr(mstatus, MSTATUS_MIE);
+    
     if(clint_timer_instance[core_id].callback != NULL)
         clint_timer_instance[core_id].callback(
             clint_timer_instance[core_id].ctx);
     clear_csr(mstatus, MSTATUS_MIE);
-    // printf("out timer int : %d times\n",i++);
+
     idle_enable_printf = 1;
     set_csr(mstatus, MSTATUS_MPIE | MSTATUS_MPP);
     write_csr(mie, ie_flag);
