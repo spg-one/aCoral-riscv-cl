@@ -16,8 +16,8 @@
 #ifndef HAL_INT_H
 #define HAL_INT_H
 
-#define HAL_INTR_ENABLE()     __asm volatile  ( "csrs mstatus,8" )
-#define HAL_INTR_DISABLE()    __asm volatile  ( "csrc mstatus,8" )
+#define HAL_INTR_ENABLE()     asm volatile  ( "csrsi mstatus,8" )
+#define HAL_INTR_DISABLE()    asm volatile  ( "csrci mstatus,8" )
 
 extern int acoral_intr_nesting;
 

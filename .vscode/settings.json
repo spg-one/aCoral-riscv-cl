@@ -75,7 +75,8 @@
         "stdint.h": "c",
         "int.h": "c",
         "stdio.h": "c",
-        "acoral.h": "c"
+        "acoral.h": "c",
+        "assert.h": "c"
     },
     "cmake.sourceDirectory": "${workspaceFolder}",
     "cmake.configureArgs": [

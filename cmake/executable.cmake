@@ -41,5 +41,10 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         DEPENDS ${PROJECT_NAME}
         COMMENT "Generating .bin file ...")
 
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_OBJDUMP} -d -S ${CMAKE_BINARY_DIR}/${PROJECT_NAME}${SUFFIX} > ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.d
+        DEPENDS ${PROJECT_NAME}
+        COMMENT "Generating .d file ...")
+
 # show information
 include(${CMAKE_CURRENT_LIST_DIR}/dump-config.cmake)

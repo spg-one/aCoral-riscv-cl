@@ -33,7 +33,7 @@ unsigned int* hal_stack_init(unsigned int *stack, void *route, void *exit, void 
     int i;
     
     stk  = stack + sizeof(unsigned int);
-    stk  = (unsigned int *)ACORAL_ALIGN_DOWN((unsigned int)stk, 8);
+    stk  = (unsigned int *)ACORAL_ALIGN_DOWN((unsigned int)stk, 16);//SPGriscv要求栈指针sp16字节对齐
     stk -= sizeof(hal_ctx_t);
 
     frame = (hal_ctx_t *)stk;

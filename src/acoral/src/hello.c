@@ -20,7 +20,7 @@
 {	
     uint64_t core = current_coreid();	
     printf("Core %ld Hello world\n", core);	
-    while(1);	
+    while(1);
 }	
 
 

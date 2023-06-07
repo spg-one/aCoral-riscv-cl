@@ -47,7 +47,7 @@
       "miDebuggerPath": "${env:RISCV_TOOLCHAIN}/bin/riscv64-unknown-elf-gdb.exe",
       // "miDebuggerServerAddress": "localhost:3333",
       "debugServerPath": "${env:RISCV_DEBUG_SERVER}/bin/openocd.exe",
-      "debugServerArgs": "-f ${workspaceFolder}/sipeed-rv-debugger.cfg",
+      "debugServerArgs": "-f ${workspaceFolder}/sipeed-rv-debugger.cfg -m 0",
       "preLaunchTask": "build acoral"
     },
     {
