@@ -26,6 +26,8 @@
 
 #define ACORAL_ALIGN_DOWN(size, align)      ((size) & ~((align) - 1))
 
+extern int __global_pointer$;
+
 unsigned int* hal_stack_init(unsigned int *stack, void *route, void *exit, void *args)
 {
     hal_ctx_t *frame;
@@ -45,6 +47,7 @@ unsigned int* hal_stack_init(unsigned int *stack, void *route, void *exit, void 
     frame->ra      = (unsigned long)exit;
     frame->a0      = (unsigned long)args;
     frame->epc     = (unsigned long)route;
+    frame->gp      = (unsigned long)&__global_pointer$; //global pointer寄存器应该是不变的，永远是__global_pointer$这个值
 
     /* force to machine mode(MPP=11) and set MPIE to 1 */
     frame->mstatus = 0x00007880;

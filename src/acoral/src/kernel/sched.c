@@ -178,14 +178,13 @@ unsigned long acoral_real_intr_sched(unsigned long old_sp)
 		if (prev->state == ACORAL_THREAD_STATE_EXIT)
 		{
 			prev->state = ACORAL_THREAD_STATE_RELEASE;
-			// HAL_INTR_SWITCH_TO(&next->stack);
 			return (unsigned long)next->stack;
 		}
-		/*线程切换*/
-		// HAL_INTR_CTX_SWITCH(&next->stack, &prev->stack, old_sp);
 		prev->stack = (unsigned int*)old_sp;
+		//需要在中断退出时切换线程，就返回新线程的栈指针
 		return (unsigned long)next->stack;
 	}
+	//不需要在中断退出时切换线程，直接返回旧线程指针
 	return old_sp;
 }
 
