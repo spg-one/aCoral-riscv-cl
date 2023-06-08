@@ -17,7 +17,7 @@ void user_main(){
     // p1data->prio_type = ACORAL_HARD_PRIO;
     acoral_period_policy_data_t p1data={
         .time=2000,
-        .prio=20,
+        .prio=21,
         .prio_type=ACORAL_HARD_PRIO
     };
 
