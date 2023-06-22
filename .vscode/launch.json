@@ -29,7 +29,7 @@
           "ignoreFailures": false
         },
         {
-          "text": "-file-exec-and-symbols C:/Users/SPGGO/Documents/aCoral/aCoral-riscv-cl/build/acoral",
+          "text": "-file-exec-and-symbols C:/Users/spggo/Documents/aCoral-riscv-cl/build/acoral",
           "description": "load file",
           "ignoreFailures": false
         },
@@ -44,9 +44,9 @@
         "programOutput": true,
       },
       "MIMode": "gdb",
-      "miDebuggerPath": "${env:RISCV_TOOLCHAIN}/bin/riscv64-unknown-elf-gdb.exe",
+      "miDebuggerPath": "riscv64-unknown-elf-gdb.exe",
       // "miDebuggerServerAddress": "localhost:3333",
-      "debugServerPath": "${env:RISCV_DEBUG_SERVER}/bin/openocd.exe",
+      "debugServerPath": "openocd.exe",
       "debugServerArgs": "-f ${workspaceFolder}/sipeed-rv-debugger.cfg -m 0",
       "preLaunchTask": "build acoral"
     },
@@ -75,7 +75,7 @@
           "ignoreFailures": false
         },
         {
-          "text": "-file-exec-and-symbols C:/Users/SPGGO/Documents/aCoral/aCoral-riscv-cl/build/acoral",
+          "text": "-file-exec-and-symbols C:/Users/spggo/Documents/aCoral-riscv-cl/build/acoral",
           "description": "load file",
           "ignoreFailures": false
         },
@@ -90,9 +90,9 @@
         "programOutput": true,
       },
       "MIMode": "gdb",
-      "miDebuggerPath": "${env:RISCV_TOOLCHAIN}/bin/riscv64-unknown-elf-gdb.exe",
+      "miDebuggerPath": "riscv64-unknown-elf-gdb.exe",
       // "miDebuggerServerAddress": "localhost:3333",
-      "debugServerPath": "${env:RISCV_DEBUG_SERVER}/bin/openocd.exe",
+      "debugServerPath": "openocd.exe",
       "debugServerArgs": "-f ${workspaceFolder}/sipeed-rv-debugger.cfg"
     }
   ]

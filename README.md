@@ -27,24 +27,16 @@ This is aCoral-I single-core version on k210 board,developed with Kendryte K210 
 ---
 ## II. Prerequisite
 ### 1. install toolchain
-download [here](https://github.com/kendryte/kendryte-gnu-toolchain/releases/tag/v8.2.0-20190213), add a System Enviroment Variable named
-```
-%RISCV_TOOLCHAIN%
-```
-set value to the directory of toolchain, e.g.
+download [here](https://github.com/kendryte/kendryte-gnu-toolchain/releases/tag/v8.2.0-20190213), add 'bin' directory to System Enviroment Path, e.g.
 ``` 
-C:\Users\SPGGO\Documents\aCoral\kendryte-toolchain
+C:\Users\SPGGO\Documents\aCoral\kendryte-toolchain\bin
 ```
 <br/>
 
 ### 2. install openocd
-download [here](https://github.com/kendryte/openocd-kendryte/releases/tag/v0.2.3), add a System Enviroment Variable named
-```
-%RISCV_RISCV_DEBUG_SERVER%
-```
-set value to the directory of openocd, e.g.
+download [here](https://github.com/kendryte/openocd-kendryte/releases/tag/v0.2.3), add 'bin' directory to System Enviroment Path, e.g.
 ``` 
-C:\Users\SPGGO\Documents\aCoral\tool-openocd
+C:\Users\SPGGO\Documents\aCoral\tool-openocd\bin
 ```
 <br/>
 
@@ -70,7 +62,7 @@ make
 
 You will get 2 key files in build dir, `acoral` and `acoral.bin`.
 
-* If you are using want to debug your program, use `acoral`. You need to replace the string at line 132 in launch.json
+* If you are using want to debug your program, use `acoral`. You need to replace the string at line 32 and line 78 in launch.json
 ```
 C:/Users/SPGGO/Documents/aCoral/aCoral-riscv-cl/build/acoral
 ``` 
