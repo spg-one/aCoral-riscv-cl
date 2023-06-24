@@ -31,6 +31,8 @@ download [here](https://github.com/kendryte/kendryte-gnu-toolchain/releases/tag/
 ``` 
 C:\Users\SPGGO\Documents\aCoral\kendryte-toolchain\bin
 ```
+PS : remember to copy and rename the file "\bin\mingw32-make" to "make", so that vscode plugin could recognize it.
+
 <br/>
 
 ### 2. install openocd
@@ -40,14 +42,15 @@ C:\Users\SPGGO\Documents\aCoral\tool-openocd\bin
 ```
 <br/>
 
-
 ### 3. install cmake
-download [here](https://cmake.org/download/), and don't forget to add it to System Path
+download [here](https://cmake.org/download/), and don't forget to add it to System Path.
+
 <br/>
 
+### 4. install VScode plugin "CMake Tools"
+easy to configure and generate program in VScode.
 
-### 4. install mingw-w64
-download [here](https://www.mingw-w64.org/downloads/), and don't forget to add it to System Path
+<br/>
 
 ---
 ## III. Usage
@@ -62,15 +65,17 @@ make
 
 You will get 2 key files in build dir, `acoral` and `acoral.bin`.
 
-* If you are using want to debug your program, use `acoral`. You need to replace the string at line 32 and line 78 in launch.json
-```
-C:/Users/SPGGO/Documents/aCoral/aCoral-riscv-cl/build/acoral
-``` 
-to
-```
-/your/acoral/elf/loaction
-```
-2. If you want to flash it onto k210, use `acoral.bin`. Flash tool could be download download [here](https://github.com/sipeed/kflash_gui/releases). Remember to press 'BOOT' button on board while pressing 'RESET', that is for entering ISP Download Mode.Baud rate need to be set as 115200.
+* If you are using want to debug your program, use `acoral`. You need to replace two strings after "-file-exec-and-symbols" in launch.json
+  ```
+  C:/Users/SPGGO/Documents/aCoral/aCoral-riscv-cl/build/acoral
+  ``` 
+  to
+  ```
+  /your/acoral/elf/loaction
+  ```
+<br/>
+
+* If you want to flash it onto k210, use `acoral.bin`. Flash tool could be download download [here](https://github.com/sipeed/kflash_gui/releases). Remember to press 'BOOT' button on board while pressing 'RESET', that is for entering ISP Download Mode.Baud rate need to be set as 115200.
 
 ---
 ## IV. aCoral-I User Programming API
