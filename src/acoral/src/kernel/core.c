@@ -82,7 +82,7 @@ void init(void *args)
 #ifdef CFG_SHELL
 	acoral_shell_init();
 #endif
-	// user_main();
+	user_main();
 	printf("init thread done!\n");
 }
 

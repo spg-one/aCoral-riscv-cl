@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/kendryte/kendryte-standalone-sdk.svg)](https://travis-ci.org/kendryte/kendryte-standalone-sdk)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-This is aCoral-I single-core version on k210 board,developed with Kendryte K210 standalone SDK.
+This is aCoral-I single-core version on k210 board,developed with Kendryte K210 standalone SDK. Attention that the nncase runtime version here is "v0" which you may find in the newest repo of "K210 standalone SDK" along with "v1". 
 
 ---
 ## I. TOC
