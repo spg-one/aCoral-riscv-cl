@@ -928,7 +928,7 @@ void spi_receive_data_multiple_dma(dmac_channel_number_t dma_send_channel_num,
             v_recv_len = rx_len / 4;
             break;
         case SPI_TRANS_SHORT:
-#if FIX_CACHE
+#if FIX_CACHE //SPG 不用cache，因为同时用cache和spi可能会出现数据一致性问题
             write_cmd = iomem_malloc(cmd_len + rx_len / 2 * sizeof(uint32_t));
 #else
             write_cmd = malloc(cmd_len + rx_len / 2 * sizeof(uint32_t));

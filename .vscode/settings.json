@@ -76,7 +76,9 @@
         "int.h": "c",
         "stdio.h": "c",
         "acoral.h": "c",
-        "assert.h": "c"
+        "assert.h": "c",
+        "spi.h": "c",
+        "fpioa.h": "c"
     },
     "cmake.sourceDirectory": "${workspaceFolder}",
     "cmake.configureArgs": [

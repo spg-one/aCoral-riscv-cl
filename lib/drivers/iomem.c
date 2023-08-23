@@ -50,7 +50,7 @@ static void iomem_set(void *s, uint8_t c, uint32_t num)
 
 static void iomem_init()
 {
-    malloc_cortol.membase = (uint8_t *)((uintptr_t)_heap_line-0x40000000);
+    malloc_cortol.membase = (uint8_t *)((uintptr_t)_heap_line-0x40000000);  //SPG _heap_line就是_heap_start，membase就是_heap_start不用cache的那个地址
     malloc_cortol.memsize = (uint32_t)_ioheap_line - (uint32_t)malloc_cortol.membase;
 
     malloc_cortol.memtblsize = malloc_cortol.memsize / IOMEM_BLOCK_SIZE;

@@ -29,7 +29,7 @@
           "ignoreFailures": false
         },
         {
-          "text": "-file-exec-and-symbols C:/Users/SPGGO/Documents/aCoral-riscv-cl/build/acoral",
+          "text": "-file-exec-and-symbols C:/Users/spggo/Documents/aCoral-riscv-cl/build/acoral",
           "description": "load file",
           "ignoreFailures": false
         },
@@ -75,7 +75,7 @@
           "ignoreFailures": false
         },
         {
-          "text": "-file-exec-and-symbols C:/Users/SPGGO/Documents/aCoral-riscv-cl/build/acoral",
+          "text": "-file-exec-and-symbols C:/Users/spggo/Documents/aCoral-riscv-cl/build/acoral",
           "description": "load file",
           "ignoreFailures": false
         },

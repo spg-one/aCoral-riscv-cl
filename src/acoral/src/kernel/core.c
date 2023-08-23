@@ -80,7 +80,7 @@ void init(void *args)
 			;
 			/*应用级相关服务初始化,应用级不要使用延时函数，没有效果的*/
 #ifdef CFG_SHELL
-	acoral_shell_init();
+	// acoral_shell_init();
 #endif
 	user_main();
 	printf("init thread done!\n");
