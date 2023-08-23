@@ -248,16 +248,21 @@ SECTIONS
    */
   . = ALIGN(64);
   PROVIDE( _end = ABSOLUTE(.) );
-  /* Leave 2 holes for stack & TLS, the size can set in kconfig */
-  PROVIDE( _heap_start = ABSOLUTE(.) + _stack_size * 2 );
+  
+  ACORAL_HEAP_SIZE = 0x400000;
+  PROVIDE( _heap_start = ABSOLUTE(.) + _stack_size * 2 ); /* _heap_start 和_heap_end是给acoral的acoral_malloc用的 */
+  PROVIDE( _heap_end = _heap_start + ACORAL_HEAP_SIZE );
+
+  /* Leave 2 holes for stack & TLS */
   PROVIDE( _tp0 = (_end + 63) & (-64) );
   PROVIDE( _tp1 = _tp0 + _stack_size );
   PROVIDE( _sp0 = _tp0 + _stack_size );
   PROVIDE( _sp1 = _tp1 + _stack_size );
 
-  /* ISR Stack is at the end of memory, right after the Heap End , the memory size can set in kconfig */
+  /* ISR Stack is at the end of memory, right after the Heap End */
   ISR_STACK_SIZE = 0x2800 ;
-  PROVIDE( _heap_end = _ram_end - ISR_STACK_SIZE );
+  PROVIDE( _sdk_heap_start = _heap_end );
+  PROVIDE( _sdk_heap_end = _ram_end - ISR_STACK_SIZE );
   PROVIDE( ISR_STACK_TOP = _ram_end );
 }
 

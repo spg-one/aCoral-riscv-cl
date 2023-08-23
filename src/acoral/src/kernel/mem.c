@@ -26,9 +26,13 @@
 
 extern int _heap_start; ///< 堆内存起始地址，定义于链接脚本
 extern int _heap_end;	///< 堆内存结束地址，定义于链接脚本
+extern int _sdk_heap_start;	
+extern int _sdk_heap_end;	
 
 void acoral_mem_sys_init()
 {
+	printf_debug("heap start: 0x%x, heap end: 0x%x \n",(unsigned int)&_heap_start, (unsigned int)&_heap_end);
+	printf_debug("sdk heap start: 0x%x, sdk heap end: 0x%x \n",(unsigned int)&_sdk_heap_start, (unsigned int)&_sdk_heap_end);
 	acoral_mem_init((unsigned int)&_heap_start, (unsigned int)&_heap_end); // 伙伴系统初始化
 #ifdef CFG_MEM2
 	acoral_mem_init2(); // 任意大小内存分配系统初始化

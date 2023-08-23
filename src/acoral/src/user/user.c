@@ -5,6 +5,6 @@
 
 void user_main(){
     test_period_thrad();
-    test_ai();
+    //test_ai();
 
 }
