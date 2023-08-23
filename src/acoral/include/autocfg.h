@@ -44,8 +44,8 @@
 
 #undef ARCH_ACORAL_FPU /*//SPG中断保护现场那里*/
 
-#undef NDEBUG //断言assert(),需要输出debug信息的时候要undef
-#ifndef NDEBUG
+#undef EN_ASSERT //开启断言需要define
+#ifdef EN_ASSERT
 #define Assert(cond, format, ...) \
   do { \
     if (!(cond)) { \
@@ -53,6 +53,16 @@
       assert(cond); \
     } \
   } while (0)
+
+#else
+#define Assert(cond, format, ...)
+#endif
+
+#define DEBUG_INFO //开启debug信息需要define
+#ifdef DEBUG_INFO
+#define printf_debug printf
+#else
+#define printf_debug
 #endif
 
 #endif
