@@ -5,6 +5,7 @@
 #include "iomem.h"
 #include "printf.h"
 #include "atomic.h"
+#include "acoral.h"
 
 #define IOMEM_BLOCK_SIZE 256
 
@@ -28,6 +29,8 @@ extern char *_ioheap_line;
 extern char *_heap_line;
 extern char _heap_start[];
 extern char *_heap_cur;
+extern char * _sdk_heap_line;
+extern char * _sdk_ioheap_line;
 
 iomem_malloc_t malloc_cortol = 
 {
@@ -50,15 +53,16 @@ static void iomem_set(void *s, uint8_t c, uint32_t num)
 
 static void iomem_init()
 {
-    malloc_cortol.membase = (uint8_t *)((uintptr_t)_heap_line-0x40000000);  //SPG _heap_line就是_heap_start，membase就是_heap_start不用cache的那个地址
-    malloc_cortol.memsize = (uint32_t)_ioheap_line - (uint32_t)malloc_cortol.membase;
+    printf_debug("sdk heap start: 0x%x, sdk heap end: 0x%x \n",(unsigned int)_sdk_heap_line, (unsigned int)_sdk_ioheap_line);
+    malloc_cortol.membase = (uint8_t *)((uintptr_t)_sdk_heap_line-0x40000000);  //SPG _heap_line就是_heap_start，membase就是_heap_start不用cache的那个地址
+    malloc_cortol.memsize = (uint32_t)_sdk_ioheap_line - (uint32_t)malloc_cortol.membase;
 
     malloc_cortol.memtblsize = malloc_cortol.memsize / IOMEM_BLOCK_SIZE;
-    malloc_cortol.memmap = (uint16_t *)malloc(malloc_cortol.memtblsize * 2);
+    malloc_cortol.memmap = (uint16_t *)acoral_malloc(malloc_cortol.memtblsize * 2);
     mb();
 
-    malloc_cortol.membase = (uint8_t *)((uintptr_t)_heap_line-0x40000000);
-    malloc_cortol.memsize = (uint32_t)_ioheap_line - (uint32_t)malloc_cortol.membase;
+    malloc_cortol.membase = (uint8_t *)((uintptr_t)_sdk_heap_line-0x40000000);
+    malloc_cortol.memsize = (uint32_t)_sdk_ioheap_line - (uint32_t)malloc_cortol.membase;
     malloc_cortol.memtblsize = malloc_cortol.memsize / IOMEM_BLOCK_SIZE;
 
     iomem_set(malloc_cortol.memmap, 0, malloc_cortol.memtblsize * 2);

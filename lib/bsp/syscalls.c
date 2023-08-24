@@ -97,9 +97,13 @@ static const char *TAG = "SYSCALL";
 
 extern char _heap_start[];
 extern char _heap_end[];
+extern char _sdk_heap_start[];
+extern char _sdk_heap_end[];
 char *_heap_cur = &_heap_start[0];
-char *_heap_line = &_heap_start[0];
-char *_ioheap_line = &_heap_end[0]-0x40000000;
+char *_heap_line = &_heap_start[0]; //初始值指向_heap_start
+char *_ioheap_line = &_heap_end[0]-0x40000000; //初始值指向_heap_end(不用cache)
+char *_sdk_heap_line = &_sdk_heap_start[0]; //初始值指向_sdk_heap_start
+char *_sdk_ioheap_line = &_sdk_heap_end[0] -0x40000000; //初始值指向_sdk_heap_end（不用cache）
 
 sys_putchar_t sys_putchar;
 sys_getchar_t sys_getchar;
