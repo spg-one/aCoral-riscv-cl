@@ -54,7 +54,8 @@ public:
         memcpy(buffer_iomem, buffer_cache, size);
         for (int i = 0; i < size; i++)
         {
-            if (buffer_iomem[i] != buffer_cache[i])
+            if (buffer_iomem[i] != buffer_cache[i]) //SPG原地复制就是为了确保buffer中的模型（kmodel原始数据）已经写入了sram，而不是还在缓存在cache中。
+                                                    //但是我不理解的是，为什么要写回？难道在上面try_load_model这步有可能修改buffer中的model_data吗？
             {
                 printf("flush model fail:%d %x %x \n", i, buffer_iomem[i], buffer_cache[i]);
                 while (1)
