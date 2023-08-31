@@ -119,9 +119,9 @@ typedef enum _spi_work_mode
 
 typedef enum _spi_frame_format
 {
-    SPI_FF_STANDARD,
+    SPI_FF_STANDARD, //SPG SPI_FF_STANDARD为标准3线
     SPI_FF_DUAL,
-    SPI_FF_QUAD,
+    SPI_FF_QUAD, //SPG 四线
     SPI_FF_OCTAL
 } spi_frame_format_t;
 

@@ -60,10 +60,9 @@ int test_ai(){
 #endif
     model_data = (uint8_t *)acoral_malloc(KMODEL_SIZE);
 
-    sysctl_pll_set_freq(SYSCTL_PLL1, PLL1_OUTPUT_FREQ);
-    // uarths_init();
+    sysctl_pll_set_freq(SYSCTL_PLL1, PLL1_OUTPUT_FREQ); //SPG pll1是给AI用的
 
-    w25qxx_init(3, 0);
+    w25qxx_init(3, 0); //SPG用的SPI3
     w25qxx_enable_quad_mode();
     w25qxx_read_data(0xC00000, model_data, KMODEL_SIZE, W25QXX_QUAD_FAST);
 #ifdef DEBUG_INFO

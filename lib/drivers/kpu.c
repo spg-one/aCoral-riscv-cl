@@ -1630,8 +1630,11 @@ static void ai_step_not_isr(void *userdata)
 int kpu_run_kmodel(kpu_model_context_t *ctx, const uint8_t *src, dmac_channel_number_t dma_ch, kpu_done_callback_t done_callback, void *userdata)
 {
     if(ctx->is_nncase)
+    {
+        printf_debug("model is nncase,not on kpu\n");
         return nncase_run_kmodel(ctx, src, dma_ch, done_callback, userdata);
-
+    }
+        
     ctx->dma_ch = dma_ch;
     ctx->done_callback = done_callback;
     ctx->userdata = userdata;

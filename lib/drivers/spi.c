@@ -108,7 +108,7 @@ static int spi_clk_init(uint8_t spi_num)
 {
     configASSERT(spi_num < SPI_DEVICE_MAX && spi_num != 2);
     if(spi_num == 3)
-        sysctl_clock_set_clock_select(SYSCTL_CLOCK_SELECT_SPI3, 1);
+        sysctl_clock_set_clock_select(SYSCTL_CLOCK_SELECT_SPI3, 1); //SPGSPI使用pll0
     sysctl_clock_enable(SYSCTL_CLOCK_SPI0 + spi_num);
     sysctl_clock_set_threshold(SYSCTL_THRESHOLD_SPI0 + spi_num, 0);
     return 0;
