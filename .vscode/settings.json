@@ -78,7 +78,9 @@
         "acoral.h": "c",
         "assert.h": "c",
         "spi.h": "c",
-        "fpioa.h": "c"
+        "fpioa.h": "c",
+        "user.h": "c",
+        "test_period.h": "c"
     },
     "cmake.sourceDirectory": "${workspaceFolder}",
     "cmake.configureArgs": [

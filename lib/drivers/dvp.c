@@ -138,8 +138,8 @@ void dvp_init(uint8_t reg_len)
     sysctl_clock_enable(SYSCTL_CLOCK_DVP);
     sysctl_reset(SYSCTL_RESET_DVP);
     dvp->cmos_cfg &= (~DVP_CMOS_CLK_DIV_MASK);
-    dvp->cmos_cfg |= DVP_CMOS_CLK_DIV(3) | DVP_CMOS_CLK_ENABLE;
-    dvp_sccb_clk_init();
+    dvp->cmos_cfg |= DVP_CMOS_CLK_DIV(3) | DVP_CMOS_CLK_ENABLE; //SPG设置dvp接口的PCLK为APB总线频率的3倍并使能APB总线到dvp的时钟信号
+    dvp_sccb_clk_init(); //SPG 初始化dvp接口中的sccb总线时钟，sccb用于通过dvp配置和控制camera
     dvp_reset();
 }
 
@@ -214,7 +214,7 @@ void dvp_set_ai_addr(uint32_t r_addr, uint32_t g_addr, uint32_t b_addr)
 void dvp_set_display_addr(uint32_t addr)
 {
 #if FIX_CACHE
-    configASSERT(!is_memory_cache((uintptr_t)addr));
+    // configASSERT(!is_memory_cache((uintptr_t)addr));
 #endif
     dvp->rgb_addr = addr;
 }

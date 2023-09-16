@@ -1631,7 +1631,7 @@ int kpu_run_kmodel(kpu_model_context_t *ctx, const uint8_t *src, dmac_channel_nu
 {
     if(ctx->is_nncase)
     {
-        printf_debug("model is nncase,not on kpu\n");
+        printf("model is nncase,not on kpu\n");
         return nncase_run_kmodel(ctx, src, dma_ch, done_callback, userdata);
     }
         
