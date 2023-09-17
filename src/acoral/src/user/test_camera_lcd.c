@@ -38,6 +38,9 @@ static int on_irq_dvp(void *ctx)
         dvp_config_interrupt(DVP_CFG_START_INT_ENABLE | DVP_CFG_FINISH_INT_ENABLE, 0);
         dvp_clear_interrupt(DVP_STS_FRAME_FINISH);
         g_dvp_finish_flag = 1;
+        lcd_draw_picture(0, 0, 320, 240, g_lcd_gram);
+        dvp_config_interrupt(DVP_CFG_START_INT_ENABLE | DVP_CFG_FINISH_INT_ENABLE, 1);
+        g_dvp_finish_flag = 0;
     } else
     {
         if(g_dvp_finish_flag == 0)
@@ -128,18 +131,19 @@ int test_camera_lcd(void)
     /* system start */
     printf("system start\n");
     g_dvp_finish_flag = 0;
+    dvp_clear_interrupt(DVP_STS_FRAME_START | DVP_STS_FRAME_FINISH);
+    dvp_config_interrupt(DVP_CFG_START_INT_ENABLE | DVP_CFG_FINISH_INT_ENABLE, 1);
+    // while(1)
+    // {
+    //     dvp_clear_interrupt(DVP_STS_FRAME_START | DVP_STS_FRAME_FINISH);
+    //     dvp_config_interrupt(DVP_CFG_START_INT_ENABLE | DVP_CFG_FINISH_INT_ENABLE, 1);
 
-    while(1)
-    {
-        dvp_clear_interrupt(DVP_STS_FRAME_START | DVP_STS_FRAME_FINISH);
-        dvp_config_interrupt(DVP_CFG_START_INT_ENABLE | DVP_CFG_FINISH_INT_ENABLE, 1);
-
-        while(g_dvp_finish_flag == 0)
-            ;
-        g_dvp_finish_flag = 0;
-        /* display pic*/
+    //     while(g_dvp_finish_flag == 0)
+    //         ;
+    //     g_dvp_finish_flag = 0;
+    //     /* display pic*/
        
-        lcd_draw_picture(0, 0, 320, 240, g_lcd_gram);
-    }
+    //     lcd_draw_picture(0, 0, 320, 240, g_lcd_gram);
+    // }
     return 0;
 }
