@@ -80,7 +80,12 @@
         "spi.h": "c",
         "fpioa.h": "c",
         "user.h": "c",
-        "test_period.h": "c"
+        "test_period.h": "c",
+        "test_camera_lcd.h": "c",
+        "nt35310.h": "c",
+        "plic.h": "c",
+        "gc0328.h": "c",
+        "region_layer.h": "c"
     },
     "cmake.sourceDirectory": "${workspaceFolder}",
     "cmake.configureArgs": [
