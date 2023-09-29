@@ -15,8 +15,8 @@
 
 #ifndef ACORAL_LIST_H
 #define ACORAL_LIST_H
-
-#define offsetof(TYPE, MEMBER) ((unsigned int) &((TYPE *)0)->MEMBER)
+#include <stddef.h>
+// #define offsetof(TYPE, MEMBER) ((unsigned int) &((TYPE *)0)->MEMBER)
 
 ///用于寻找给定的结构体成员所属的那个结构体
 #define list_entry(ptr, type, member) ((type *)((char *)ptr - offsetof(type,member)))

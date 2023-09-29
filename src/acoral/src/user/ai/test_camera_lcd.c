@@ -310,7 +310,7 @@ int test_camera_lcd(void)
         region_layer_run(&detect_rl, NULL);
         lcd_draw_picture(0, 0, 320, 240, g_camera_565);
         region_layer_draw_boxes(&detect_rl, drawboxes);
-        msleep(500);
+        msleep(50);
         g_ai_done_flag = 0;
     }
 

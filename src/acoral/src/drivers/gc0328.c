@@ -21,6 +21,7 @@
 #include "i2c.h"
 #include "stdio.h"
 #include <unistd.h>
+#include "gc0328.h"
 
 #define	ONE_I2C_CONTROL		1
 
@@ -131,7 +132,7 @@ static const uint8_t gc0328_config[][2] =
     {0x0B , 0x00},  // Col start high: [1:0] col start high bit[9:8]
     {0x0C , 0x00},  // Col start low: col start low bit[7:0]
     {0x16 , 0x00},  // Analog gain: [7] Analog gain enable
-	{0x17 , 0x16},
+	{0x17 , 0x17}, //SPG开了mirror，左右镜像了
     {0x18 , 0x0E},  // CISCTL_mode2: [7:6] output mode-VGA mode; [5] column binning; [4] double reset mode; [3:2] sdark mode -- sdark 4 rows in each frame; [1] new exposure/normal bad frame; [0] badframe enable
     {0x19 , 0x06},  // CISCTL_mode3: [6] for double restg; [5] restg on/off; [4] capture AD data edge; [3:0] AD pipe number
 
