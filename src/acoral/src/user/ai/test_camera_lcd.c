@@ -29,19 +29,24 @@
 #include "w25qxx.h"
 #include "dmac.h"
 #include "region_layer.h"
+#include "bsp.h"
 
-uint16_t g_camera_565[320*240] = {0};
+#define ANCHOR_NUM 5 //anchor锚框的数量
+#define CLASS_NUMBER 20 //yolo2模型可以识别20类物体
+/*模型输入张量为320*240*3，输出张量为7*10*125，其中7*10表示将原始图像分为7*10个grid cell，125=5*(5+20），第一个5表示5个锚框，第二个5表示每个锚框的长宽、中心点坐标和置信度，20表示每个锚框预测20类物体*/
+
+
 static region_layer_t detect_rl;
-#define ANCHOR_NUM 5
-float g_anchor[ANCHOR_NUM * 2] = {1.08, 1.19, 3.42, 4.41, 6.63, 11.38, 9.42, 5.11, 16.62, 10.52};
+
 kpu_model_context_t task;
 uint8_t *model_data_yolo;
-#define CLASS_NUMBER 20
-extern const uint8_t gImage_image[] __attribute__((aligned(128)));
-uint8_t model_input[320*240*3];
+volatile uint8_t g_dvp_finish_flag; //摄像头采集完一帧，发中断，置1
+volatile uint8_t g_ai_done_flag; //模型跑完置1
 
-volatile uint8_t g_dvp_finish_flag;
-volatile uint8_t g_ai_done_flag;
+uint8_t model_input[320*240*3] = {0}; 
+uint16_t g_camera_565[320*240] = {0}; //gc0328获得的图像为RGB565格式
+float g_anchor[ANCHOR_NUM * 2] = {1.08, 1.19, 3.42, 4.41, 6.63, 11.38, 9.42, 5.11, 16.62, 10.52}; //锚框长宽
+static uint32_t lable_string_draw_ram[115 * 16 * 8 / 2];
 
 typedef struct
 {
@@ -52,6 +57,7 @@ typedef struct
     uint32_t *ptr;
 } class_lable_t;
 
+/* class名字与对应的颜色，颜色为RGB565格式 */
 class_lable_t class_lable[CLASS_NUMBER] =
 {
     {"aeroplane", GREEN},
@@ -76,8 +82,6 @@ class_lable_t class_lable[CLASS_NUMBER] =
     {"tvmonitor", 0xF9B6}
 };
 
-static uint32_t lable_string_draw_ram[115 * 16 * 8 / 2];
-
 static void lable_init(void)
 {
 #if (CLASS_NUMBER > 1)
@@ -96,7 +100,7 @@ static void lable_init(void)
 #endif
 }
 
-
+//rgb888转rgb565
 void rgb888_to_lcd(uint8_t *src, uint16_t *dest, size_t width, size_t height)
 {
     size_t i, chn_size = width * height;
@@ -112,6 +116,7 @@ void rgb888_to_lcd(uint8_t *src, uint16_t *dest, size_t width, size_t height)
     }
 }
 
+//rgb565转rgb888
 void rgb565_to_rgb888(uint16_t *src, uint8_t *dest, size_t width, size_t height)
 {
     size_t i, chn_size = width * height;
@@ -127,9 +132,6 @@ void rgb565_to_rgb888(uint16_t *src, uint8_t *dest, size_t width, size_t height)
         dest[chn_size*2+i] = b;
     }
 }
-
-
-
 
 static void drawboxes(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, uint32_t class, float prob)
 {
@@ -150,14 +152,11 @@ static void drawboxes(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, uint32
 #endif
 }
 
-
 static int ai_done(void *ctx)
 {
     g_ai_done_flag = 1;
     return 0;
 }
-
-
 
 static int on_irq_dvp(void *ctx)
 {
@@ -261,7 +260,7 @@ int test_camera_lcd(void)
     detect_rl.anchor_number = ANCHOR_NUM;
     detect_rl.anchor = g_anchor;
     detect_rl.threshold = 0.5;
-    detect_rl.nms_value = 0.2;
+    detect_rl.nms_value = 0.2; //非极大值抑制交并比IOU阈值
     region_layer_init(&detect_rl, 10, 7, 125, 320, 240);
 
     printf("flash init\n");
@@ -286,8 +285,6 @@ int test_camera_lcd(void)
     g_ai_done_flag = 0;
     dvp_clear_interrupt(DVP_STS_FRAME_START | DVP_STS_FRAME_FINISH);
     dvp_config_interrupt(DVP_CFG_START_INT_ENABLE | DVP_CFG_FINISH_INT_ENABLE, 1);
-    // printf("len:%lu\n",strlen(gImage_image));
-    // printf("r:%d,g:%d,b:%d",gImage_image[0],gImage_image[320*240],gImage_image[320*240*2]);
     while(1)
     {
         dvp_clear_interrupt(DVP_STS_FRAME_START | DVP_STS_FRAME_FINISH);
@@ -302,42 +299,16 @@ int test_camera_lcd(void)
         while(g_ai_done_flag == 0)
             ;
         /* display pic*/
-        kpu_get_output(&task, 0, &output, &output_size);
+        kpu_get_output(&task, 0, (uint8_t**)&output, (size_t*)&output_size);
         detect_rl.input = output;
         output_size /= sizeof(float);
 
         /* start region layer */
         region_layer_run(&detect_rl, NULL);
-        lcd_draw_picture(0, 0, 320, 240, g_camera_565);
+        lcd_draw_picture(0, 0, 320, 240, (uint32_t*)g_camera_565);
         region_layer_draw_boxes(&detect_rl, drawboxes);
         msleep(50);
         g_ai_done_flag = 0;
     }
-
-    // g_ai_done_flag = 0;
-    //     /* start to calculate */
-    // // rgb888_to_lcd(gImage_image, g_camera_565, 320, 240);
-    // // rgb565_to_rgb888(g_camera_565,model_input,320,240);
-    // kpu_run_kmodel(&task, gImage_image, DMAC_CHANNEL5, ai_done, NULL);
-    // while(!g_ai_done_flag);
-
-    // kpu_get_output(&task, 0, &output, &output_size);
-    // detect_rl.input = output;
-    // output_size /= sizeof(float);
-
-    // /* start region layer */
-    // region_layer_run(&detect_rl, NULL);
-
-    // /* display pic*/
-    
-    // rgb888_to_lcd(gImage_image, g_camera_565, 320, 240);
-    // rgb565_to_rgb888(g_camera_565, gImage_image, 320, 240);
-    // rgb888_to_lcd(gImage_image, g_camera_565, 320, 240);
-    // lcd_draw_picture(0, 0, 320, 240, g_camera_565);
-
-    /* draw boxs */
-    
-    // region_layer_draw_boxes(&detect_rl, drawboxes);
-    printf("done\n");
     return 0;
 }

@@ -230,7 +230,7 @@ static void get_region_boxes(region_layer_t *rl, float *predictions, float **pro
             for (int j = 0; j < classes; ++j)
             {
                 int class_index = entry_index(rl, n * layer_width * layer_height + i, coords + 1 + j);
-                float prob = scale * predictions[class_index];
+                float prob = scale * predictions[class_index]; //SPG 每个anchor box的置信度（有物体的概率）乘以类别概率（如果有物体，是什么类的概率），即一个全概率公式，得到一个anchor box内每一类物体的概率
 
                 probs[index][j] = (prob > threshold) ? prob : 0;
                 if (prob > max)
@@ -375,6 +375,7 @@ static void region_layer_output(region_layer_t *rl, obj_info_t *obj_info)
 void region_layer_run(region_layer_t *rl, obj_info_t *obj_info)
 {
     forward_region_layer(rl);
+    //SPG 至此yolo2的推理阶段才算结束，上面的region层才是yolo2模型的最后一层，输出的是所有anchor box的位置、大小以及置信度。
     get_region_boxes(rl, rl->output, rl->probs, rl->boxes);
     do_nms_sort(rl, rl->boxes, rl->probs);
     // region_layer_output(rl, obj_info);
