@@ -343,42 +343,19 @@ static int max_index(float *a, int n)
     return max_i;
 }
 
-static void region_layer_output(region_layer_t *rl, obj_info_t *obj_info)
-{
-    uint32_t obj_number = 0;
-    uint32_t image_width = rl->image_width;
-    uint32_t image_height = rl->image_height;
-    uint32_t boxes_number = rl->boxes_number;
-    float threshold = rl->threshold;
-    box_t *boxes = (box_t *)rl->boxes;
-    
-    for (int i = 0; i < rl->boxes_number; ++i)
-    {
-        int class  = max_index(rl->probs[i], rl->classes);
-        float prob = rl->probs[i][class];
-
-        if (prob > threshold)
-        {
-            box_t *b = boxes + i;
-            obj_info->obj[obj_number].x1 = b->x * image_width - (b->w * image_width / 2);
-            obj_info->obj[obj_number].y1 = b->y * image_height - (b->h * image_height / 2);
-            obj_info->obj[obj_number].x2 = b->x * image_width + (b->w * image_width / 2);
-            obj_info->obj[obj_number].y2 = b->y * image_height + (b->h * image_height / 2);
-            obj_info->obj[obj_number].class_id = class;
-            obj_info->obj[obj_number].prob = prob;
-            obj_number++;
-        }
-    }
-    obj_info->obj_number = obj_number;
-}
-
 void region_layer_run(region_layer_t *rl, obj_info_t *obj_info)
 {
     forward_region_layer(rl);
-    //SPG 至此yolo2的推理阶段才算结束，上面的region层才是yolo2模型的最后一层，输出的是所有anchor box的位置、大小以及置信度。
+    //至此yolo2的推理阶段才算结束，上面的region层才是yolo2模型的最后一层.\
+      目的是从yolo2模型的7*10*125的输出中，将125拆解为5*（5+20），\
+      获得每个gird cell中5个anchor box的位置（x、y）、大小（w、h）、置信度（scale）以及20类每一类的概率（predictions[20]）。
+    
     get_region_boxes(rl, rl->output, rl->probs, rl->boxes);
+    //get_region_boxes()是为了在每个grid cell中，找出那些可能包含物体的anchor box
+
     do_nms_sort(rl, rl->boxes, rl->probs);
-    // region_layer_output(rl, obj_info);
+    //非极大值抑制，去除重复anchor box，重复anchor box指的是同一个物体的不同框。
+  
 }
 
 void region_layer_draw_boxes(region_layer_t *rl, callback_draw_box callback)

@@ -40,7 +40,7 @@
         }
       ],
       "logging": {
-        "engineLogging": false,
+        "engineLogging": true,
         "programOutput": true,
       },
       "MIMode": "gdb",

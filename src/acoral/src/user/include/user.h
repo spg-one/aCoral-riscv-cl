@@ -3,6 +3,6 @@
 
 #include "test_period.h"
 #include "test_iris.h"
-#include "test_camera_lcd.h"
+#include "test_yolo2.h"
 
 #endif

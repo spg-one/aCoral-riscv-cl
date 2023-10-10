@@ -1,4 +1,4 @@
-/* Copyright 2018 Canaan Inc.
+/* Copyright 2023 SPG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,16 +34,16 @@
 #define ANCHOR_NUM 5 //anchor锚框的数量
 #define CLASS_NUMBER 20 //yolo2模型可以识别20类物体
 /*模型输入张量为320*240*3，输出张量为7*10*125，其中7*10表示将原始图像分为7*10个grid cell，125=5*(5+20），第一个5表示5个锚框，第二个5表示每个锚框的长宽、中心点坐标和置信度，20表示每个锚框预测20类物体*/
-
+#define KMODEL_SIZE (1351976)
 
 static region_layer_t detect_rl;
 
 kpu_model_context_t task;
 uint8_t *model_data_yolo;
-volatile uint8_t g_dvp_finish_flag; //摄像头采集完一帧，发中断，置1
-volatile uint8_t g_ai_done_flag; //模型跑完置1
+volatile uint8_t g_dvp_finish_flag = 0; //摄像头采集完一帧，发中断，置1
+volatile uint8_t g_ai_done_flag = 0; //模型跑完置1
 
-uint8_t model_input[320*240*3] = {0}; 
+uint8_t model_input[320*240*3] = {0}; //yolo2模型输入图像为rgb888格式
 uint16_t g_camera_565[320*240] = {0}; //gc0328获得的图像为RGB565格式
 float g_anchor[ANCHOR_NUM * 2] = {1.08, 1.19, 3.42, 4.41, 6.63, 11.38, 9.42, 5.11, 16.62, 10.52}; //锚框长宽
 static uint32_t lable_string_draw_ram[115 * 16 * 8 / 2];
@@ -100,8 +100,15 @@ static void lable_init(void)
 #endif
 }
 
-//rgb888转rgb565
-void rgb888_to_lcd(uint8_t *src, uint16_t *dest, size_t width, size_t height)
+/**
+ * @brief rgb888转rgb565
+ * 
+ * @param src 待转换像素
+ * @param dest 目标像素输出地址
+ * @param width 像素（图片）宽度
+ * @param height 像素（图片）高度
+ */
+static void rgb888_to_lcd(uint8_t *src, uint16_t *dest, size_t width, size_t height)
 {
     size_t i, chn_size = width * height;
     for (size_t i = 0; i < width * height; i++)
@@ -116,8 +123,15 @@ void rgb888_to_lcd(uint8_t *src, uint16_t *dest, size_t width, size_t height)
     }
 }
 
-//rgb565转rgb888
-void rgb565_to_rgb888(uint16_t *src, uint8_t *dest, size_t width, size_t height)
+/**
+ * @brief rgb565转rgb888
+ * 
+ * @param src 待转换像素
+ * @param dest 目标像素输出地址
+ * @param width 像素（图片）宽度
+ * @param height 像素（图片）高度
+ */
+static void rgb565_to_rgb888(uint16_t *src, uint8_t *dest, size_t width, size_t height)
 {
     size_t i, chn_size = width * height;
     for (size_t i = 0; i < width * height; i++)
@@ -158,24 +172,31 @@ static int ai_done(void *ctx)
     return 0;
 }
 
+/**
+ * @brief dvp接口开始或完成接收一帧图像
+ * 
+ * @param ctx 
+ * @return int 
+ */
 static int on_irq_dvp(void *ctx)
-{
-    if(dvp_get_interrupt(DVP_STS_FRAME_FINISH))
+{   /* 完成一帧图像接收 */
+    if(dvp_get_interrupt(DVP_STS_FRAME_FINISH)) 
     {
+        /* 关中断 */
         dvp_config_interrupt(DVP_CFG_START_INT_ENABLE | DVP_CFG_FINISH_INT_ENABLE, 0);
+        /* 清中断 */
         dvp_clear_interrupt(DVP_STS_FRAME_FINISH);
         g_dvp_finish_flag = 1;
-        // lcd_draw_picture(0, 0, 320, 240, g_camera_565);
-        
+
+        /* 开中断 */
         dvp_config_interrupt(DVP_CFG_START_INT_ENABLE | DVP_CFG_FINISH_INT_ENABLE, 1);
-        // g_dvp_finish_flag = 0;
     } else
-    {
+    {   /* 开始一帧图像接收 */
         if(g_dvp_finish_flag == 0)
             dvp_start_convert();
+        /* 清中断 */
         dvp_clear_interrupt(DVP_STS_FRAME_START);
     }
-
     return 0;
 }
 
@@ -207,22 +228,25 @@ static void io_set_power(void)
     sysctl_set_power_mode(SYSCTL_POWER_BANK7, SYSCTL_POWER_V18);
 }
 
-int test_camera_lcd(void)
+/* 运行yolo2 */
+int test_yolo2(void)
 {
+    float *output;
+    size_t output_size;
+
     /* Set CPU and dvp clk */
     sysctl_pll_set_freq(SYSCTL_PLL0, 800000000UL);
     sysctl_pll_set_freq(SYSCTL_PLL1, 400000000UL);
     sysctl_pll_set_freq(SYSCTL_PLL2, 45158400UL);
     uarths_init();
 
-    /*SPG 初始化外部中断的优先级、CPU中断阈值，清除所有中断挂起标志*/
+    /* 初始化外部中断的优先级、CPU中断阈值，清除所有中断挂起标志 */
     plic_init(); 
 
     /*初始化DVP和LCD引脚*/
     io_init();
     io_set_power();
 
-    lable_init();
     /* LCD init */
     printf("LCD init\n");
     lcd_init();
@@ -237,12 +261,7 @@ int test_camera_lcd(void)
     dvp_set_output_enable(0, 1);
     dvp_set_output_enable(1, 1);
     dvp_set_image_format(DVP_CFG_RGB_FORMAT); //SPG 指定dvp接收到的图像格式为16位的RGB565，这样接收到320*240*16这么多位数据后就可以产生一个中断DVP_STS_FRAME_FINISH表示一帧完成
-
     dvp_set_image_size(320, 240); //SPG上面320*240的来源
-
-    gc0328_init();
-    open_gc0328_0();
-
     dvp_set_ai_addr((uint32_t)0x40600000, (uint32_t)0x40612C00, (uint32_t)0x40625800);
     dvp_set_display_addr((uint32_t)g_camera_565);
     dvp_config_interrupt(DVP_CFG_START_INT_ENABLE | DVP_CFG_FINISH_INT_ENABLE, 0);
@@ -254,37 +273,39 @@ int test_camera_lcd(void)
     plic_irq_register(IRQN_DVP_INTERRUPT, on_irq_dvp, NULL);
     plic_irq_enable(IRQN_DVP_INTERRUPT);
 
-    /* enable global interrupt */
-    sysctl_enable_irq();
-
+    /* Camera init */
+    gc0328_init(); //初始化摄像头
+    open_gc0328(); //打开摄像头
+    
+    /* 初始化画框参数 */
     detect_rl.anchor_number = ANCHOR_NUM;
     detect_rl.anchor = g_anchor;
-    detect_rl.threshold = 0.5;
-    detect_rl.nms_value = 0.2; //非极大值抑制交并比IOU阈值
-    region_layer_init(&detect_rl, 10, 7, 125, 320, 240);
+    detect_rl.threshold = 0.5; //判断框内是否有某一类物体的阈值
+    detect_rl.nms_value = 0.2; //极大值抑制交并比IOU阈值，用来去除重复的框
+    region_layer_init(&detect_rl, 10, 7, 125, 320, 240); //将图像分割为7*10个grid cell，每个grid cell包含5*（5+20）个数据，原始图像为320*240
+    lable_init();
 
+    /* flash init */
     printf("flash init\n");
     w25qxx_init(3, 0);
     w25qxx_enable_quad_mode();
 
-#define KMODEL_SIZE (1351976)
-
+    /* 加载模型 */
     model_data_yolo = (uint8_t *)malloc(KMODEL_SIZE);
     w25qxx_read_data(0xA00000, model_data_yolo, KMODEL_SIZE, W25QXX_QUAD_FAST);
-    /* system start */
-    printf("system start\n");
+    
+    /* 解析模型 */
     if (kpu_load_kmodel(&task, model_data_yolo) != 0)
     {
         printf("\nmodel init error\n");
         while (1);
     }
-
-    float *output;
-    size_t output_size;
-    g_dvp_finish_flag = 0;
-    g_ai_done_flag = 0;
-    dvp_clear_interrupt(DVP_STS_FRAME_START | DVP_STS_FRAME_FINISH);
-    dvp_config_interrupt(DVP_CFG_START_INT_ENABLE | DVP_CFG_FINISH_INT_ENABLE, 1);
+   
+    /* enable global interrupt */
+    sysctl_enable_irq();
+    
+    /* system start */
+    printf("system start\n");
     while(1)
     {
         dvp_clear_interrupt(DVP_STS_FRAME_START | DVP_STS_FRAME_FINISH);

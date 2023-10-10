@@ -16,7 +16,6 @@
 #define __GC0328_H__
 
 int gc0328_init(void);
-void open_gc0328_0();
-void open_gc0328_1();
+void open_gc0328();
 
 #endif

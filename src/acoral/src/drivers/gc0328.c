@@ -23,8 +23,6 @@
 #include <unistd.h>
 #include "gc0328.h"
 
-#define	ONE_I2C_CONTROL		1
-
 #define GC0328_ADDR                     0x42
 static const uint8_t gc0328_config[][2] =
 {
@@ -347,7 +345,6 @@ static const uint8_t gc0328_config[][2] =
 
 void i2c_master_init(int num)
 {
-#if	ONE_I2C_CONTROL
 	if (num)
 	{
 		// fpioa_set_function(DVP_SCCB_SDA_PIN_2, FUNC_RESV0);
@@ -361,20 +358,6 @@ void i2c_master_init(int num)
 		fpioa_set_function(DVP_SCCB_SCLK_PIN, FUNC_I2C0_SCLK);
 	}
 	i2c_init(0, GC0328_ADDR >> 1, 7, 100000);
-	
-#else
-    if (num)
-    {
-        fpioa_set_function(13, FUNC_I2C1_SDA);
-        fpioa_set_function(10, FUNC_I2C1_SCLK);
-    }
-    else
-    {
-        fpioa_set_function(9, FUNC_I2C0_SDA);
-        fpioa_set_function(10, FUNC_I2C0_SCLK);
-    }
-    i2c_init(num, GC0328_ADDR >> 1, 7, 100000);
-#endif
 }
 
 static void gc0328_wr_reg(uint8_t num, uint8_t reg,uint8_t data)
@@ -396,9 +379,8 @@ static uint8_t gc0328_rd_reg(uint8_t num, uint8_t reg)
     return data_buf;
 }
 
-void open_gc0328_0()
+void open_gc0328()
 {
-#if	ONE_I2C_CONTROL
     usleep(1 * 1000);
     i2c_master_init(1);
     usleep(1 * 1000);
@@ -412,53 +394,6 @@ void open_gc0328_0()
     gc0328_wr_reg(0, 0xFE, 0x00);
     gc0328_wr_reg(0, 0xF1, 0x07);
     gc0328_wr_reg(0, 0xF2, 0x01);
-#else
-    usleep(1 * 1000);
-    i2c_master_init(1);
-    usleep(1 * 1000);
-    gc0328_wr_reg(1, 0xFE, 0x00);
-    gc0328_wr_reg(1, 0xF1, 0x00);
-    gc0328_wr_reg(1, 0xF2, 0x00);
-    
-    usleep(1 * 1000);
-    i2c_master_init(0);
-    usleep(1 * 1000);
-    gc0328_wr_reg(0, 0xFE, 0x00);
-    gc0328_wr_reg(0, 0xF1, 0x07);
-    gc0328_wr_reg(0, 0xF2, 0x01);
-#endif
-}
-
-void open_gc0328_1()
-{
-#if	ONE_I2C_CONTROL
-	//usleep(1 * 1000);
-	i2c_master_init(0);
-	//usleep(1 * 1000);
-	gc0328_wr_reg(0, 0xFE, 0x00);
-	gc0328_wr_reg(0, 0xF1, 0x00);
-	gc0328_wr_reg(0, 0xF2, 0x00);
-	usleep(1 * 1000);
-	i2c_master_init(1);
-	//usleep(1 * 1000);
-	gc0328_wr_reg(0, 0xFE, 0x00);
-	gc0328_wr_reg(0, 0xF1, 0x07);
-	gc0328_wr_reg(0, 0xF2, 0x01);
-
-#else
-    usleep(1 * 1000);
-    i2c_master_init(0);
-    usleep(1 * 1000);
-    gc0328_wr_reg(0, 0xFE, 0x00);
-    gc0328_wr_reg(0, 0xF1, 0x00);
-    gc0328_wr_reg(0, 0xF2, 0x00);
-    usleep(1 * 1000);
-    i2c_master_init(1);
-    usleep(1 * 1000);
-    gc0328_wr_reg(1, 0xFE, 0x00);
-    gc0328_wr_reg(1, 0xF1, 0x07);
-    gc0328_wr_reg(1, 0xF2, 0x01);
-#endif	
 }
 
 int gc0328_read_id(uint8_t num, uint8_t *id)
@@ -481,20 +416,6 @@ int gc0328_init(void)
         gc0328_wr_reg(num, gc0328_config[i][0], gc0328_config[i][1]);
     }
     usleep(1 * 1000);
-// #if	ONE_I2C_CONTROL	
-//     num = 0;
-// 	i2c_master_init(1);
-// 	gc0328_read_id(num, &data);
-// #else
-//     num = 1;
-//     i2c_master_init(num);
-//     gc0328_read_id(num, &data);
-// #endif	
-//     printf("gc0328 1 ID : 0x%x\n", data);
-//     for (i = 0; gc0328_config[i][0]; i++)
-//     {
-//         gc0328_wr_reg(num, gc0328_config[i][0], gc0328_config[i][1]);
-//     }
     return 0;
 }
 
