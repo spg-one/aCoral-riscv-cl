@@ -74,7 +74,7 @@ void init(void *args)
 	acoral_init_list(&acoral_res_release_queue);
 	data.prio = ACORAL_DAEMON_PRIO;
 	data.prio_type = ACORAL_HARD_PRIO;
-	daemon_id = acoral_create_thread(daem, DAEM_STACK_SIZE, NULL, "daemon", NULL, ACORAL_SCHED_POLICY_COMM, &data);
+	daemon_id = acoral_create_thread(daem, DAEM_STACK_SIZE, NULL, "daemon", NULL, ACORAL_SCHED_POLICY_COMM, &data,0);
 	if (daemon_id == -1)
 		while (1)
 			;
@@ -104,7 +104,7 @@ void acoral_core_cpu_start()
 	acoral_start_sched = false;
 	data.prio = ACORAL_IDLE_PRIO;
 	data.prio_type = ACORAL_HARD_PRIO;
-	idle_id = acoral_create_thread(idle, IDLE_STACK_SIZE, NULL, "idle", NULL, ACORAL_SCHED_POLICY_COMM, &data);
+	idle_id = acoral_create_thread(idle, IDLE_STACK_SIZE, NULL, "idle", NULL, ACORAL_SCHED_POLICY_COMM, &data,0);
 	if (idle_id == -1)
 	{
 		while (1)
@@ -114,7 +114,7 @@ void acoral_core_cpu_start()
 	/*创建初始化线程,这个调用层次比较多，需要多谢堆栈*/
 	data.prio = ACORAL_INIT_PRIO;
 	/*动态堆栈*/
-	init_id = acoral_create_thread(init, 512, "in init", "init", NULL, ACORAL_SCHED_POLICY_COMM, &data);
+	init_id = acoral_create_thread(init, 512, "in init", "init", NULL, ACORAL_SCHED_POLICY_COMM, &data, 0);
 	if (init_id == -1)
 	{
 		while (1)

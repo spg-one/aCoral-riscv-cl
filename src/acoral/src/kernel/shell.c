@@ -135,7 +135,7 @@ void acoral_shell_init(void){
 
 	data.prio=ACORAL_NONHARD_RT_PRIO_MIN;
 	data.prio_type=ACORAL_HARD_PRIO;
-	acoral_create_thread(acoral_shell_enter,SHELL_STACK_SIZE,NULL,"shell",NULL,ACORAL_SCHED_POLICY_COMM,&data);
+	acoral_create_thread(acoral_shell_enter,SHELL_STACK_SIZE,NULL,"shell",NULL,ACORAL_SCHED_POLICY_COMM,&data, 0);
 }
 
 

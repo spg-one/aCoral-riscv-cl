@@ -20,10 +20,11 @@
 #include "comm_thrd.h"
 #include "int.h"
 #include <stdio.h>
+#include "dag.h"
 
 acoral_sched_policy_t comm_policy; ///< 普通线程策略控制块
 
-int comm_policy_thread_init(acoral_thread_t *thread, void (*route)(void *args), void *args, void *data)
+int comm_policy_thread_init(acoral_thread_t *thread, void (*route)(void *args), void *args, void *data,bool isDAG)
 {
 	unsigned int prio;
 	acoral_comm_policy_data_t *policy_data;
@@ -43,7 +44,8 @@ int comm_policy_thread_init(acoral_thread_t *thread, void (*route)(void *args), 
 	//  	}
 	//  }
 	thread->prio = prio;
-	if (acoral_thread_init(thread, route, acoral_thread_exit, args) != 0)
+	void* exit = isDAG?acoral_dag_thread_exit:comm_thread_exit;
+	if (acoral_thread_init(thread, route, exit, args) != 0)
 	{
 		printf("No thread stack:%s\n", thread->name);
 		acoral_enter_critical();

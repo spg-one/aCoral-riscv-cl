@@ -18,6 +18,7 @@
 
 #include "list.h"
 // #include "thread.h"
+#include <stdbool.h>
 
 typedef struct acoral_thread_tcb acoral_thread_t; 
 
@@ -41,7 +42,7 @@ typedef struct{
 
 void acoral_policy_delay_deal(void);
 acoral_sched_policy_t *acoral_get_policy_ctrl(unsigned char type);
-int acoral_policy_thread_init(acoralSchedPolicyEnum policy,acoral_thread_t *thread,void (*route)(void *args),void *args,void *data);
+int acoral_policy_thread_init(acoralSchedPolicyEnum policy,acoral_thread_t *thread,void (*route)(void *args),void *args,void *data,bool isDAG);
 void acoral_sched_policy_init(void);
 void acoral_policy_thread_release(acoral_thread_t *thread);
 

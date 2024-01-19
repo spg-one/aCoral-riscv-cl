@@ -19,7 +19,6 @@
 * acoral_resume_thread_by_id 唤醒某个线程
 * acoral_delay_self 将当前线程延时
 * acoral_kill_thread_by_id 干掉某个线程
-* acoral_thread_exit 结束当前线程
 * acoral_change_prio_self 改变当前线程优先级
 * acoral_thread_change_prio_by_id 改变某个线程优先级
 ---
