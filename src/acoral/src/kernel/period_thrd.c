@@ -22,10 +22,9 @@
 #include "int.h"
 #include <stdio.h>
 #include "lsched.h"
-#include "dag.h"
 
 acoral_list_t period_delay_queue; ///<周期线程专用延时队列，只要是周期线程，就会被挂载到这个队列上，延时时间就是周期，每次周期过后重新挂载
-int period_policy_thread_init(acoral_thread_t *thread,void (*route)(void *args),void *args,void *data,bool isDAG){
+int period_policy_thread_init(acoral_thread_t *thread,void (*route)(void *args),void *args,void *data){
 	unsigned int prio;
 	acoral_period_policy_data_t *policy_data;
 	period_private_data_t *private_data;
@@ -58,7 +57,6 @@ int period_policy_thread_init(acoral_thread_t *thread,void (*route)(void *args),
 		private_data->args=args;
 		thread->private_data=private_data;
 	}
-	void* exit = isDAG?acoral_dag_thread_exit:period_thread_exit;
 	if(acoral_thread_init(thread,route,period_thread_exit,args)!=0){
 		printf("No thread stack:%s\n",thread->name);
 		acoral_enter_critical();

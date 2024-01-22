@@ -35,7 +35,7 @@ typedef struct{
  * @param data 
  * @return int 
  */
-int comm_policy_thread_init(acoral_thread_t *thread,void (*route)(void *args),void *args,void *data,bool isDAG);
+int comm_policy_thread_init(acoral_thread_t *thread,void (*route)(void *args),void *args,void *data);
 
 /**
  * @brief 注册普通机制

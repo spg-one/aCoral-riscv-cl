@@ -21,7 +21,6 @@
 #include "mem.h"
 #include "event.h"
 #include "policy.h"
-#include <stdbool.h>
 
 #define ACORAL_MAX_PRIO_NUM ((CFG_MAX_THREAD + 1) & 0xff) ///<41。总共有40个线程，就有0~40共41个优先级
 #define ACORAL_MINI_PRIO CFG_MAX_THREAD ///<aCoral最低优先级40
@@ -131,7 +130,7 @@ void acoral_thread_change_prio(acoral_thread_t* thread, unsigned int prio);
  * @param data 线程策略数据
  * @return int 返回线程id
  */
-int acoral_create_thread(void (*route)(void *args),unsigned int stack_size,void *args,char *name,void *stack,acoralSchedPolicyEnum sched_policy,void *data,bool isDAG);
+int acoral_create_thread(void (*route)(void *args),unsigned int stack_size,void *args,char *name,void *stack,acoralSchedPolicyEnum sched_policy,void *data);
 
 /**
  * @brief 挂起当前线程
@@ -171,7 +170,7 @@ void acoral_kill_thread_by_id(int id);
  * @brief 结束当前线程
  * 
  */
-void comm_thread_exit(void);
+void acoral_thread_exit(void);
 
 /**
  * @brief 改变当前线程优先级

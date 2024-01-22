@@ -1,4 +1,3 @@
-//以下算子定义在lib\nncase\runtime\neutral\neutral_ops.cpp中
 BEGINE_DEFINE_TARGET(neutral)
     DEFINE_NEUTRAL_RUNTIME_OP(binary,               Binary,             0x0)
     DEFINE_NEUTRAL_RUNTIME_OP(concat,               Concat,             0x1)

@@ -41,6 +41,6 @@ typedef struct{
 void period_thread_exit(void);
 void period_thread_delay(acoral_thread_t* thread,unsigned int time);
 void period_delay_deal(void);
-int period_policy_thread_init(acoral_thread_t *thread,void (*route)(void *args),void *args,void *data,bool isDAG);
+int period_policy_thread_init(acoral_thread_t *thread,void (*route)(void *args),void *args,void *data);
 void period_policy_init(void);
 #endif
