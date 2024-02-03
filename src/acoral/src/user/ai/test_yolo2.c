@@ -30,6 +30,7 @@
 #include "dmac.h"
 #include "region_layer.h"
 #include "bsp.h"
+#include "kernel.h"
 
 #define ANCHOR_NUM 5 //anchor锚框的数量
 #define CLASS_NUMBER 20 //yolo2模型可以识别20类物体
@@ -286,7 +287,7 @@ int test_yolo2(void)
     lable_init();
 
     /* flash init */
-    printf("flash init\n");
+    ACORAL_LOG_TRACE("Flash Init Start\n");
     w25qxx_init(3, 0);
     w25qxx_enable_quad_mode();
 
@@ -305,7 +306,8 @@ int test_yolo2(void)
     sysctl_enable_irq();
     
     /* system start */
-    printf("system start\n");
+    ACORAL_LOG_TRACE("YOLO2 System Start\n");
+    ACORAL_LOG_TRACE("test\n");
     while(1)
     {
         dvp_clear_interrupt(DVP_STS_FRAME_START | DVP_STS_FRAME_FINISH);

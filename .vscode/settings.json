@@ -88,7 +88,8 @@
         "region_layer.h": "c",
         "board_config.h": "c",
         "comm_thrd.h": "c",
-        "dag.h": "c"
+        "dag.h": "c",
+        "log.h": "c"
     },
     "cmake.sourceDirectory": "${workspaceFolder}",
     "cmake.configureArgs": [

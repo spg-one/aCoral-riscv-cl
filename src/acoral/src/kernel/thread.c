@@ -29,7 +29,7 @@ extern void acoral_evt_queue_del(acoral_thread_t *thread);
 acoral_list_t acoral_threads_queue; ///<aCoral全局所有线程队列
 acoral_pool_ctrl_t acoral_thread_pool_ctrl;
 
-int acoral_create_thread(void (*route)(void *args),unsigned int stack_size,void *args,char *name,void *stack,acoralSchedPolicyEnum sched_policy,void *data,bool isDAG){
+int acoral_create_thread(void (*route)(void *args),unsigned int stack_size,void *args,char *name,void *stack,acoralSchedPolicyEnum sched_policy,void *data){
 	acoral_thread_t *thread;
         /*分配tcb数据块*/
 	thread=acoral_alloc_thread();
@@ -46,7 +46,7 @@ int acoral_create_thread(void (*route)(void *args),unsigned int stack_size,void 
 	else
 		thread->stack_buttom=NULL;
 	thread->policy=sched_policy;
-	return acoral_policy_thread_init(sched_policy,thread,route,args,data,isDAG);
+	return acoral_policy_thread_init(sched_policy,thread,route,args,data);
 }
 
 extern int daemon_id;

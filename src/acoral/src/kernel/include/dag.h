@@ -3,8 +3,7 @@
 
 #include "thread.h"
 
-#define ENABLE_DAG 1
-#define DAG_SIZE 10
+
 
 typedef enum{
     ACORAL_DAG_NODE_FULL= -10,
@@ -15,27 +14,28 @@ typedef enum{
 
 typedef struct node_struct
 {
-    int tid;
-    acoral_thread_t* tcb;
-    int former_task_num;
+    int tid;                        ///<DAG节点对应的线程id
+    acoral_thread_t* tcb;           ///<DAG节点对应的线程
+    int former_task_num;            ///<DAG节点剩余未完成的前驱节点数
+    int former_task_num_origin;     ///<DAG节点前驱节点数
 }node;
 
 typedef struct dag_struct
 {
-    node nodes[DAG_SIZE];
-    int edges[DAG_SIZE][DAG_SIZE];
-    int num;
-}DAG;
+    node nodes[CFG_DAG_SIZE];               ///<DAG节点
+    int edges[CFG_DAG_SIZE][CFG_DAG_SIZE];  ///<DAG边
+    int num;                                ///<既表示系统中DAG节点数量，也作为节点编号使用
+}acoral_dag_t;
 
 /**
- * @brief 
+ * @brief 往dag_global中添加一个DAG节点，并创建对应的线程
  * 
- * @param tid 线程id 
+ * @param route 线程函数
  * @param input 
  * @param output 
  * @return int DAG节点号
  */
-int dag_add_node(int tid,void* input, void* output);
+int dag_add_node(void (*route)(void *args),void* input, void* output);
 
 /**
  * @brief 

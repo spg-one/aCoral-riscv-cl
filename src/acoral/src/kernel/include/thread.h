@@ -131,7 +131,7 @@ void acoral_thread_change_prio(acoral_thread_t* thread, unsigned int prio);
  * @param data 线程策略数据
  * @return int 返回线程id
  */
-int acoral_create_thread(void (*route)(void *args),unsigned int stack_size,void *args,char *name,void *stack,acoralSchedPolicyEnum sched_policy,void *data,bool isDAG);
+int acoral_create_thread(void (*route)(void *args),unsigned int stack_size,void *args,char *name,void *stack,acoralSchedPolicyEnum sched_policy,void *data);
 
 /**
  * @brief 挂起当前线程
