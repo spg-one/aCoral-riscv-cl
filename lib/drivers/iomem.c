@@ -53,7 +53,6 @@ static void iomem_set(void *s, uint8_t c, uint32_t num)
 
 static void iomem_init()
 {
-    printf_debug("sdk heap start: 0x%x, sdk heap end: 0x%x \n",(unsigned int)_sdk_heap_line, (unsigned int)_sdk_ioheap_line);
     malloc_cortol.membase = (uint8_t *)((uintptr_t)_sdk_heap_line-0x40000000);  //SPG _heap_line就是_heap_start，membase就是_heap_start不用cache的那个地址
     malloc_cortol.memsize = (uint32_t)_sdk_ioheap_line - (uint32_t)malloc_cortol.membase;
 

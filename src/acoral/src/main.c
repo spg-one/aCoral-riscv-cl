@@ -15,6 +15,7 @@
 #include <stdio.h>	
 #include "bsp.h"	
 #include "core.h"
+#include "log.h"
 
  int core1_function(void *ctx)	
 {	
@@ -27,7 +28,7 @@
  int main()	
 {	
     uint64_t core = current_coreid();	
-    printf("Core %ld Hello world spg1\n", core);	
+    ACORAL_LOG_TRACE("Core %ld Hello world\n", core);	
     // register_core1(core1_function, NULL);	
     acoral_start();	
 }

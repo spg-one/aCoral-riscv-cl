@@ -64,7 +64,7 @@ void daem(void *args)
 
 void init(void *args)
 {
-	printf("init thread start!\n");
+	ACORAL_LOG_TRACE("Init Thread Start\n");
 	acoral_comm_policy_data_t data;
 	acoral_ticks_init();
 	/*ticks中断初始化函数*/
@@ -83,16 +83,15 @@ void init(void *args)
 	// acoral_shell_init();
 #endif
 	user_main();
-	printf("init thread done!\n");
+	ACORAL_LOG_TRACE("Init Thread Done\n");
 }
 
 void acoral_start()
 {
-	printf("in acoral_start\n");
-	printf("module init start!\n");
+	ACORAL_LOG_TRACE("Kernel Module Init Start!\n");
 	/*内核模块初始化*/
 	acoral_module_init();
-	printf("module init done!\n");
+
 	/*主cpu开始函数*/
 	acoral_core_cpu_start();
 }
@@ -122,6 +121,7 @@ void acoral_core_cpu_start()
 		}
 	}
 	print_logo();
+	printf("\033[0;35m------------------------------OS Start------------------------------\033[0m\n");
 	acoral_start_os();
 }
 
