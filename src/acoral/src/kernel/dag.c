@@ -8,10 +8,10 @@ int dag_init(){
             dag_global.edges[i][j] = 0;
         }
     }
-    dag_global.num = 0;
+    dag_global.node_num = 0;
 }
 
-int dag_add_node(void (*route)(void *args),void* input, void* output){
+int dag_add_node(void (*route)(void *args),int core_id, void* input, void* output){
     // if(dag_global.num>=10){
     //     return ACORAL_DAG_NODE_FULL;
     // }

@@ -199,7 +199,7 @@ auto tfp_printf(Args &&... args) -> decltype(::tfp_printf(std::forward<Args>(arg
 #endif
 #endif
 
-int printk(const char *format, ...) _TFP_SPECIFY_PRINTF_FMT(1, 2);
+int printk(const char *format, ...) _TFP_SPECIFY_PRINTF_FMT(1, 2); //SPG这个是SDK自带的printf函数的实现，用来取代库函数printf，更tiny
 
 #ifdef __cplusplus
 }

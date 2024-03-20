@@ -407,9 +407,8 @@ int gc0328_init(void)
     uint8_t data;
     uint32_t i;
     uint8_t num = 0;
-    i2c_master_init(num);
+    i2c_master_init(num); //SCCB总线和I2C几乎一样，所以虽然实际上是SCCB总线（scl和sda信号），但用了i2c这个名字
     gc0328_read_id(num, &data);
-    printf("gc0328 0 ID : 0x%x\n", data);
 
     for (i = 0; gc0328_config[i][0]; i++)
     {

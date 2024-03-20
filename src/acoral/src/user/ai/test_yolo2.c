@@ -249,13 +249,13 @@ int test_yolo2(void)
     io_set_power();
 
     /* LCD init */
-    printf("LCD init\n");
+    ACORAL_LOG_TRACE("YOLO2 LCD Init\n");
     lcd_init();
     lcd_set_direction(DIR_YX_RLDU);
     lcd_clear(BLUE);
 
     /* DVP init */
-    printf("DVP init\n");
+    ACORAL_LOG_TRACE("YOLO2 DVP Init\n");
     dvp_init(8); //SPG 这里完成了对dvp接口中像素输出速率时钟pclk和控制信号时钟scl的初始化
     dvp_set_xclk_rate(24000000); //SPG 设置dvp接口的输入基准时钟信号xclk来自于apb总线频率，xclk就是上面scl和pclk的基准
     dvp_enable_burst();
@@ -269,7 +269,7 @@ int test_yolo2(void)
     dvp_disable_auto();
 
     /* DVP interrupt config */
-    printf("DVP interrupt config\n");
+    ACORAL_LOG_TRACE("YOLO2 DVP Interrupt Config\n");
     plic_set_priority(IRQN_DVP_INTERRUPT, 1);
     plic_irq_register(IRQN_DVP_INTERRUPT, on_irq_dvp, NULL);
     plic_irq_enable(IRQN_DVP_INTERRUPT);
@@ -298,7 +298,7 @@ int test_yolo2(void)
     /* 解析模型 */
     if (kpu_load_kmodel(&task, model_data_yolo) != 0)
     {
-        printf("\nmodel init error\n");
+        ACORAL_LOG_ERROR("model init error\n");
         while (1);
     }
    
@@ -307,7 +307,6 @@ int test_yolo2(void)
     
     /* system start */
     ACORAL_LOG_TRACE("YOLO2 System Start\n");
-    ACORAL_LOG_TRACE("test\n");
     while(1)
     {
         dvp_clear_interrupt(DVP_STS_FRAME_START | DVP_STS_FRAME_FINISH);

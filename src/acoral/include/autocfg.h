@@ -28,7 +28,7 @@
 #define CFG_DAG_SIZE 10
 #define CFG_HARD_RT_PRIO_NUM (0) ///<硬实时任务的专属优先级个数
 #define CFG_MAX_THREAD (40) ///<///最多40个线程
-#define CFG_MIN_STACK_SIZE (102400) ///<线程最小拥有10240字节的栈
+#define CFG_MIN_STACK_SIZE (10240) ///<线程最小拥有10240字节的栈
 #define CFG_EVT_SEM 1
 #define CFG_MSG 1
 #define CFG_TICKS_PER_SEC (100) ///<acoral每秒的ticks数

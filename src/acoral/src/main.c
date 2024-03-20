@@ -20,7 +20,7 @@
  int core1_function(void *ctx)	
 {	
     uint64_t core = current_coreid();	
-    printf("Core %ld Hello world\n", core);	
+    ACORAL_LOG_TRACE("Core %ld Hello world\n", core);	
     while(1);
 }	
 

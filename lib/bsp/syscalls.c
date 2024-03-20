@@ -108,7 +108,7 @@ char *_sdk_ioheap_line = &_sdk_heap_end[0] -0x40000000; //初始值指向_sdk_he
 sys_putchar_t sys_putchar;
 sys_getchar_t sys_getchar;
 
-void sys_register_putchar(sys_putchar_t putchar)
+void sys_register_putchar(sys_putchar_t putchar) //SPG实现系统调用sys_putchar，因为库函数printf依赖于系统调用sys_putchar
 {
     sys_putchar = putchar;
 }

@@ -97,7 +97,7 @@ static int uart_irq_callback(void *param)
 
 static uart_device_number_t s_uart_debug_channel = UART_DEVICE_3;
 
-static int uart_channel_putc(char c, uart_device_number_t channel)
+static int uart_channel_putc(char c, uart_device_number_t channel) //SPG这个就是k210 printf库函数最终调用的函数
 {
     while(uart[channel]->LSR & (1u << 5))
         continue;

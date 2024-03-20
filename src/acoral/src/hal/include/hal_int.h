@@ -16,8 +16,8 @@
 #ifndef HAL_INT_H
 #define HAL_INT_H
 
-#define HAL_INTR_ENABLE()     asm volatile  ( "csrsi mstatus,8" )
-#define HAL_INTR_DISABLE()    asm volatile  ( "csrci mstatus,8" )
+#define HAL_INTR_ENABLE()     asm volatile  ( "csrsi mstatus,8" ) //TODO 不应该是直接关中断，而应该保存线程的中断状态后，再关
+#define HAL_INTR_DISABLE()    asm volatile  ( "csrci mstatus,8" ) //TODO 不应该直接开，而是应该恢复线程之前的中断状态
 
 extern int acoral_intr_nesting;
 

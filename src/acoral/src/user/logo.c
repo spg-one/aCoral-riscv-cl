@@ -19,4 +19,5 @@ char* logo = "\n\
 
 void print_logo(){
     printf("%s",logo);
+    // ACORAL_LOG_TRACE("------------------------------OS Start------------------------------");
 }
