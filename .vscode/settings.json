@@ -89,7 +89,9 @@
         "board_config.h": "c",
         "comm_thrd.h": "c",
         "dag.h": "c",
-        "log.h": "c"
+        "log.h": "c",
+        "hal_thread.h": "c",
+        "hal_timer.h": "c"
     },
     "cmake.sourceDirectory": "${workspaceFolder}",
     "cmake.configureArgs": [

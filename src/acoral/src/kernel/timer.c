@@ -27,7 +27,7 @@
 #include "timer.h"
 #include "int.h"
 #include "lsched.h"
-#include "clint.h"
+#include "log.h"
 #include "list.h"
 #include <stdbool.h>
 
@@ -39,8 +39,8 @@ acoral_list_t time_delay_queue; ///<aCoral线程延时队列，调用线程delay
 acoral_list_t timeout_queue; ///<aCoral获取资源（互斥量等）超时等待队列，即在timeout时间内获取即成功，否则超时失败
 static unsigned int ticks;
 
-int time_to_ticks(unsigned int time){
-	return (time)*CFG_TICKS_PER_SEC/1000; ///<计算time对应的ticks数量
+int time_to_ticks(unsigned int mtime){
+	return (mtime)*CFG_TICKS_PER_SEC/1000; ///<计算time对应的ticks数量
 }
 
 void acoral_time_sys_init(){
@@ -76,12 +76,9 @@ void acoral_ticks_entry(int vector){
 	}
 }
 
-void acoral_ticks_init(){
-  	ticks=0;                                      	/*初始化滴答时钟计数器*/
-	clint_timer_init();                           	/*这个主要用于将用于ticks的时钟初始化*/
-	clint_timer_register(acoral_ticks_entry,NULL);	/*这个用于注册ticks的处理函数*/
-	clint_timer_start(1000/CFG_TICKS_PER_SEC,0);
-	return;
+int acoral_ticks_init(){
+	ticks=0;    	/*初始化滴答时钟计数器*/
+	return HAL_TIMER_INIT(CFG_TICKS_PER_SEC);
 }
 
 

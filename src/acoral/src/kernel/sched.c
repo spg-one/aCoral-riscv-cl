@@ -151,7 +151,7 @@ void acoral_real_sched()
 	if (prev != next)
 	{
 		acoral_set_running_thread(next);
-		// ACORAL_LOG_TRACE("Switch to Thread: %s\n",acoral_cur_thread->name);
+		ACORAL_LOG_TRACE("Switch to Thread: %s\n",acoral_cur_thread->name);
 		if (prev->state == ACORAL_THREAD_STATE_EXIT)
 		{
 			prev->state = ACORAL_THREAD_STATE_RELEASE;

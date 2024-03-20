@@ -24,6 +24,21 @@ volatile unsigned int acoral_start_sched = false; ///<aCoral启动后，经过in
 int daemon_id, idle_id, init_id;
 extern void user_main();
 extern int idle_enable_printf;
+
+char* logo = "\n\
+              \n\
+             $$$$$$\\                                $$\\ \n\
+            $$  __$$\\                               $$ |\n\
+   $$$$$$\\  $$ /  \\__| $$$$$$\\   $$$$$$\\   $$$$$$\\  $$ |\n\
+   \\____$$\\ $$ |      $$  __$$\\ $$  __$$\\  \\____$$\\ $$ |\n\
+   $$$$$$$ |$$ |      $$ /  $$ |$$ |  \\__| $$$$$$$ |$$ |\n\
+  $$  __$$ |$$ |  $$\\ $$ |  $$ |$$ |      $$  __$$ |$$ |\n\
+  \\$$$$$$$ |\\$$$$$$  |\\$$$$$$  |$$ |      \\$$$$$$$ |$$ |\n\
+   \\_______| \\______/  \\______/ \\__|       \\_______|\\__|\n\
+              \n\
+              \n\
+";
+
 void idle(void *args)
 {
 	for(;;){}
@@ -47,7 +62,7 @@ void daem(void *args)
 			tmp = tmp1;
 			if (thread->state == ACORAL_THREAD_STATE_RELEASE)
 			{
-				printf("daem is cleaning thread : %s\n",thread->name);
+				ACORAL_LOG_INFO("daem is cleaning thread : %s\n",thread->name);
 				acoral_release_thread((acoral_res_t *)thread);
 			}
 			else
@@ -66,7 +81,13 @@ void init(void *args)
 {
 	ACORAL_LOG_TRACE("Init Thread Start\n");
 	acoral_comm_policy_data_t data;
-	acoral_ticks_init();
+
+	if(acoral_ticks_init()!=0){
+		ACORAL_LOG_ERROR("Ticks Timer Init Failed");
+		while(1); //SPG 改成exit系统调用好一点
+	}
+	ACORAL_LOG_TRACE("Ticks Init Done");
+
 	/*ticks中断初始化函数*/
 	acoral_start_sched = true;
 
@@ -80,7 +101,7 @@ void init(void *args)
 			;
 			/*应用级相关服务初始化,应用级不要使用延时函数，没有效果的*/
 #ifdef CFG_SHELL
-	// acoral_shell_init();
+	acoral_shell_init();
 #endif
 	user_main();
 	ACORAL_LOG_TRACE("Init Thread Done\n");
@@ -120,8 +141,8 @@ void acoral_core_cpu_start()
 		{
 		}
 	}
-	print_logo();
-	printf("\033[0;35m------------------------------OS Start------------------------------\033[0m\n");
+	printf("%s",logo);
+
 	acoral_start_os();
 }
 

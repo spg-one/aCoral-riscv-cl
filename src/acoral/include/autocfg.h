@@ -16,21 +16,38 @@
 #ifndef AUTOCFG_H
 #define AUTOCFG_H
 
-#define AUTOCONF_INCLUDED
+/*
+ * SOC select
+ */
+#define CFG_K210 1
+#undef CFG_S3C2440
+
+#ifdef CFG_K210
+#define CFG_SMP 
+#endif
 
 /*
  * kernel configuration
  */
 #define CFG_MEM2 1 ///<任意大小内存分配系统是否启用
 #define CFG_MEM2_SIZE (102400) ///<任意大小内存分配系统的大小，是从伙伴系统管理的堆内存中拿出一部分
+
 #define CFG_THRD_PERIOD 1
-#define CFG_THRD_DAG 1
-#define CFG_DAG_SIZE 10
+
+#define CFG_THRD_DAG 1 ///<启用DAG调度
+#define CFG_DAG_SIZE 10 ///<全局DAG图节点数量上限
+
+
 #define CFG_HARD_RT_PRIO_NUM (0) ///<硬实时任务的专属优先级个数
+
 #define CFG_MAX_THREAD (40) ///<///最多40个线程
+
 #define CFG_MIN_STACK_SIZE (10240) ///<线程最小拥有10240字节的栈
+
 #define CFG_EVT_SEM 1
+
 #define CFG_MSG 1
+
 #define CFG_TICKS_PER_SEC (100) ///<acoral每秒的ticks数
 
 /*
@@ -42,7 +59,7 @@
  * System hacking
  */
 #define CFG_BAUD_RATE (115200)
-#define CFG_DEBUG 1
+#define CFG_DEBUG_INFO 1
 
 #undef ARCH_ACORAL_FPU /*//SPG中断保护现场那里*/
 
@@ -58,13 +75,6 @@
 
 #else
 #define Assert(cond, format, ...)
-#endif
-
-#define DEBUG_INFO //开启debug信息需要define
-#ifdef DEBUG_INFO
-#define printf_debug printf
-#else
-#define printf_debug
 #endif
 
 #endif

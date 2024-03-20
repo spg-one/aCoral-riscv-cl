@@ -70,9 +70,6 @@ size_t argmax(const float *src, size_t count)
 
 
 int test_iris(){
-#ifdef DEBUG_INFO
-    printf_debug("in test iris\n");
-#endif
     model_data = (uint8_t *)acoral_malloc(KMODEL_SIZE);
 
     sysctl_pll_set_freq(SYSCTL_PLL1, PLL1_OUTPUT_FREQ); //SPG pll1是给AI用的
@@ -80,9 +77,7 @@ int test_iris(){
     w25qxx_init(3, 0); //SPG用的SPI3
     w25qxx_enable_quad_mode();
     w25qxx_read_data(0xC00000, model_data, KMODEL_SIZE, W25QXX_QUAD_FAST);
-#ifdef DEBUG_INFO
-    printf_debug("after read iris model\n");
-#endif
+
     if (kpu_load_kmodel(&task1, model_data) != 0)
     {
         printf("Cannot load kmodel.\n");
@@ -107,8 +102,6 @@ int test_iris(){
         puts(labels[argmax(output, output_size / 4)]);
     }
 
-#ifdef DEBUG_INFO
-    printf_debug("out test iris\n");
-#endif
+
     return 0;
 }

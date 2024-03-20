@@ -32,7 +32,7 @@ extern int _sdk_heap_end;
 
 void acoral_mem_sys_init()
 {
-#ifdef CFG_DEBUG
+#ifdef CFG_DEBUG_INFO
 	ACORAL_LOG_DEBUG("aCoral Heap Start: 0x%x, aCoral Heap End: 0x%x \n",(unsigned int)&_heap_start, (unsigned int)&_heap_end);
 	ACORAL_LOG_DEBUG("SDK Heap Start: 0x%x, SDK Heap End: 0x%x \n",(unsigned int)&_sdk_heap_start, (unsigned int)&_sdk_heap_end);
 #endif	

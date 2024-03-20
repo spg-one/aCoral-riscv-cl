@@ -41,6 +41,7 @@ if (BUILDING_SDK)
             -Wno-error=unused-but-set-variable
             -Wno-error=unused-variable
             -Wno-error=deprecated-declarations
+            -Wno-error=unused-local-typedefs
             -Wno-multichar
             -Wextra
             -Werror=frame-larger-than=32768
