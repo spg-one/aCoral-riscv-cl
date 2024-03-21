@@ -1,0 +1,3 @@
+[submodule "src/aCoral-kernel"]
+	path = src/aCoral-kernel
+	url = https://github.com/spg-one/aCoral-kernel.git
