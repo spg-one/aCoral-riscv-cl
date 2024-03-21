@@ -95,7 +95,7 @@
     },
     "cmake.sourceDirectory": "${workspaceFolder}",
     "cmake.configureArgs": [
-        "-DPROJ=acoral"
+        "-DPROJ=aCoral-kernel"
     ],
     "cmake.outputLogEncoding": "UTF-8",
     "multiCommand.commands": [
