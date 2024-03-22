@@ -62,7 +62,7 @@ handle_irq(uintptr_t cause, uintptr_t epc, uintptr_t regs[32], uintptr_t fregs[3
 #if defined(__GNUC__)
 #pragma GCC diagnostic warning "-Woverride-init"
 #endif
-    hal_intr_nesting_inc_comm();
+    hal_intr_nesting_inc_comm(); //SPG 这里不该改sdk的吧
     uintptr_t epcRet =  irq_table[cause & CAUSE_MACHINE_IRQ_REASON_MASK](cause, epc, regs, fregs);
     hal_intr_nesting_dec_comm();
     return epcRet;
