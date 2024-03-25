@@ -9,7 +9,7 @@
       "type": "cppdbg",
       "cwd": "${workspaceFolder}",
       "request": "launch",
-      "program": "${workspaceFolder}/build/acoral",
+      "program": "${workspaceFolder}/build/acoral-kernel",
       "stopAtEntry": true,
       "filterStderr": true,
       "setupCommands": [
@@ -29,7 +29,7 @@
           "ignoreFailures": false
         },
         {
-          "text": "-file-exec-and-symbols C:/Users/spggo/Documents/aCoral-riscv-cl/build/acoral",
+          "text": "-file-exec-and-symbols C:/Users/spggo/Documents/aCoral-riscv-cl/build/acoral-kernel",
           "description": "load file",
           "ignoreFailures": false
         },
@@ -40,7 +40,7 @@
         }
       ],
       "logging": {
-        "engineLogging": true,
+        "engineLogging": false,
         "programOutput": true,
       },
       "MIMode": "gdb",
@@ -55,7 +55,7 @@
       "type": "cppdbg",
       "cwd": "${workspaceFolder}",
       "request": "launch",
-      "program": "${workspaceFolder}/build/acoral",
+      "program": "${workspaceFolder}/build/acoral-kernel",
       "stopAtEntry": true,
       "filterStderr": true,
       "setupCommands": [
@@ -75,7 +75,7 @@
           "ignoreFailures": false
         },
         {
-          "text": "-file-exec-and-symbols C:/Users/spggo/Documents/aCoral-riscv-cl/build/acoral",
+          "text": "-file-exec-and-symbols C:/Users/spggo/Documents/aCoral-riscv-cl/build/acoral-kernel",
           "description": "load file",
           "ignoreFailures": false
         },

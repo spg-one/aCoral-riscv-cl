@@ -95,7 +95,10 @@
         "lsched.h": "c",
         "hal_thread_k210.h": "c",
         "hal_int_k210.h": "c",
-        "bitops.h": "c"
+        "bitops.h": "c",
+        "lib.h": "c",
+        "kernel.h": "c",
+        "stdlib.h": "c"
     },
     "cmake.sourceDirectory": "${workspaceFolder}",
     "cmake.configureArgs": [
