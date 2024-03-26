@@ -98,7 +98,9 @@
         "bitops.h": "c",
         "lib.h": "c",
         "kernel.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "syslog.h": "c",
+        "message.h": "c"
     },
     "cmake.sourceDirectory": "${workspaceFolder}",
     "cmake.configureArgs": [

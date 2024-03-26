@@ -30,5 +30,5 @@
     uint64_t core = current_coreid();	
     ACORAL_LOG_TRACE("Core %ld Hello world\n", core);	
     // register_core1(core1_function, NULL);	
-    acoral_start();	
+    system_start();	
 }
