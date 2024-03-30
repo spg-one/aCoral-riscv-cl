@@ -100,7 +100,10 @@
         "kernel.h": "c",
         "stdlib.h": "c",
         "syslog.h": "c",
-        "message.h": "c"
+        "message.h": "c",
+        "resource.h": "c",
+        "shell.h": "c",
+        "string_view": "c"
     },
     "cmake.sourceDirectory": "${workspaceFolder}",
     "cmake.configureArgs": [
