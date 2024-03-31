@@ -103,7 +103,8 @@
         "message.h": "c",
         "resource.h": "c",
         "shell.h": "c",
-        "string_view": "c"
+        "string_view": "c",
+        "functional": "c"
     },
     "cmake.sourceDirectory": "${workspaceFolder}",
     "cmake.configureArgs": [
@@ -118,5 +119,6 @@
                 {"command": "editor.action.insertSnippet", "args": {"snippet": "-exec "}}
             ]
         }
-    ]
+    ],
+    "editor.detectIndentation": false
 }
