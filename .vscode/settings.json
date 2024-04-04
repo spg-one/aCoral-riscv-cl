@@ -104,7 +104,11 @@
         "resource.h": "c",
         "shell.h": "c",
         "string_view": "c",
-        "functional": "c"
+        "functional": "c",
+        "stdbool.h": "c",
+        "entry.h": "c",
+        "lock.h": "c",
+        "newlib.h": "c"
     },
     "cmake.sourceDirectory": "${workspaceFolder}",
     "cmake.configureArgs": [
