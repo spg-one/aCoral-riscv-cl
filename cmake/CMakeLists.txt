@@ -4,7 +4,7 @@
 set(BUILDING_SDK "yes" CACHE INTERNAL "")
 
 # basic config
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.5)
 include(./common.cmake)
 project(kendryte)
 

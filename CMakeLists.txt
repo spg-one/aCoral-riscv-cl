@@ -12,7 +12,7 @@ if (NOT PROJ)
 else()
     message("PROJ = ${PROJ}")
 endif ()
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.5)
 include(./cmake/common.cmake)
 project(${PROJ} C CXX ASM)
 
@@ -20,13 +20,11 @@ project(${PROJ} C CXX ASM)
 include(./cmake/macros.internal.cmake)
 header_directories(${SDK_ROOT}/lib)
 header_directories(src/${PROJ})
-header_directories(kendryte-standalone-demo/${PROJ})
 # build library first
 add_subdirectory(lib)
 
 # compile project
 add_source_files(src/${PROJ}/*.c src/${PROJ}/*.s src/${PROJ}/*.S src/${PROJ}/*.cpp)
 add_source_files(src/main.c)
-add_source_files(kendryte-standalone-demo/${PROJ}/*.c kendryte-standalone-demo/${PROJ}/*.s kendryte-standalone-demo/${PROJ}/*.S kendryte-standalone-demo/${PROJ}/*.cpp)
 include(./cmake/executable.cmake)
 

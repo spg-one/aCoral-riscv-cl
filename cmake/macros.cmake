@@ -3,15 +3,6 @@ macro(global_set Name Value)
     set(${Name} "${Value}" CACHE STRING "NoDesc" FORCE)
 endmacro()
 
-macro(condition_set Name Value)
-    if (NOT ${Name})
-        global_set(${Name} ${Value})
-    else ()
-        #        message("exists ${Name} is " ${ARGN})
-    endif ()
-endmacro()
-
-
 set(SOURCE_FILES "" CACHE STRING "Source Files" FORCE)
 macro(add_source_files)
     #    message(" + add_source_files ${ARGN}")
