@@ -16,7 +16,7 @@ endif ()
 
 # - Debug & Release
 IF (CMAKE_BUILD_TYPE STREQUAL Debug)
-    add_definitions(-DDEBUG=1)
+    add_definitions(-DDEBUG=1) # 等于在c文件中 #define DEBUG 1
 ENDIF ()
 
 # definitions in macros
