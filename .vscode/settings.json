@@ -125,5 +125,6 @@
             ]
         }
     ],
-    "editor.detectIndentation": false
+    "editor.detectIndentation": false,
+    "cmake.generator": "MinGW Makefiles"
 }
