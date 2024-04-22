@@ -27,6 +27,7 @@ add_compile_flags(BOTH
         -fsingle-precision-constant
         -Os
         -ggdb
+        # -pedantic
         )
 
 add_compile_flags(C -std=gnu11 -Wno-pointer-to-int-cast)

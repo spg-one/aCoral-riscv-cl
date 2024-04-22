@@ -109,7 +109,8 @@
         "entry.h": "c",
         "lock.h": "c",
         "newlib.h": "c",
-        "period_thrd.h": "c"
+        "period_thrd.h": "c",
+        "soft_timer.h": "c"
     },
     "cmake.sourceDirectory": "${workspaceFolder}",
     "cmake.configureArgs": [
