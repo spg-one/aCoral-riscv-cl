@@ -92,7 +92,6 @@
         "log.h": "c",
         "hal_thread.h": "c",
         "hal_timer.h": "c",
-        "lsched.h": "c",
         "hal_thread_k210.h": "c",
         "hal_int_k210.h": "c",
         "bitops.h": "c",
