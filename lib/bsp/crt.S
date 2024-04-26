@@ -239,8 +239,13 @@ trap_entry:
   LREG x1, 0*REGBYTES(sp)
   csrw mepc, x1
   LREG x1, 1*REGBYTES(sp)
+
+  # 恢复mstatus之前先将mstatus.MPP设为0x11（M mode）
   LREG x3, 2*REGBYTES(sp)
   csrw mstatus, x3
+  li   x3, 0x00007800
+  csrs mstatus, x3
+
   # LREG x2, 2*REGBYTES(sp)
   LREG x3, 3*REGBYTES(sp)
   LREG x4, 4*REGBYTES(sp)
